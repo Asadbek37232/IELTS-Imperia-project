@@ -11,6 +11,9 @@ interface SectionForm {
 
 interface Props { onSuccess: () => void; }
 
+const inputClass = "w-full px-4 py-2.5 border rounded-xl text-sm outline-none transition focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500";
+const labelClass = "text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 block uppercase tracking-wide";
+
 export default function CreateTest({ onSuccess }: Props) {
   const [title, setTitle] = useState('');
   const [sections, setSections] = useState<SectionForm[]>([
@@ -58,22 +61,24 @@ export default function CreateTest({ onSuccess }: Props) {
 
   if (createdPin) {
     return (
-      <div className="text-center space-y-6">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-          <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+      <div className="text-center space-y-6 py-2">
+        <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/30 rounded-2xl flex items-center justify-center mx-auto">
+          <svg className="w-8 h-8 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
           </svg>
         </div>
         <div>
-          <p className="text-xl font-bold text-gray-900">Test Created!</p>
-          <p className="text-gray-500 mt-1">Share this PIN with students:</p>
+          <p className="text-xl font-bold text-gray-900 dark:text-white">Test yaratildi!</p>
+          <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">Bu PIN kodni o'quvchilarga ulashing:</p>
         </div>
-        <div className="bg-blue-50 border-2 border-blue-300 rounded-2xl p-6">
-          <p className="text-5xl font-mono font-bold text-blue-700 tracking-widest">{createdPin}</p>
+        <div className="bg-blue-50 dark:bg-blue-950/40 border-2 border-blue-200 dark:border-blue-800 rounded-2xl p-6">
+          <p className="text-5xl font-mono font-black text-blue-700 dark:text-blue-300 tracking-widest">{createdPin}</p>
         </div>
-        <button onClick={onSuccess}
-          className="w-full py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition-colors">
-          Done
+        <button
+          onClick={onSuccess}
+          className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-colors"
+        >
+          Tayyor
         </button>
       </div>
     );
@@ -81,64 +86,100 @@ export default function CreateTest({ onSuccess }: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">{error}</div>}
+      {error && (
+        <div className="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 text-red-700 dark:text-red-400 px-4 py-3 rounded-xl text-sm">
+          {error}
+        </div>
+      )}
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Test Title</label>
-        <input type="text" value={title} onChange={e => setTitle(e.target.value)}
-          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none"
-          placeholder="e.g. IELTS Mock Test #1" required />
+        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Test nomi</label>
+        <input
+          type="text"
+          value={title}
+          onChange={e => setTitle(e.target.value)}
+          className="w-full px-4 py-3 border rounded-xl outline-none transition focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-sm"
+          placeholder="e.g. IELTS Mock Test #1"
+          required
+        />
       </div>
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <label className="text-sm font-medium text-gray-700">Sections</label>
+          <label className="text-sm font-semibold text-gray-700 dark:text-gray-300">Bo'limlar</label>
           {sections.length < 2 && (
-            <button type="button" onClick={addSection}
-              className="text-sm text-blue-600 hover:underline font-medium">+ Add Section</button>
+            <button
+              type="button"
+              onClick={addSection}
+              className="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-semibold transition-colors"
+            >
+              + Bo'lim qo'shish
+            </button>
           )}
         </div>
 
         {sections.map((section, idx) => (
-          <div key={idx} className="bg-gray-50 rounded-xl p-4 space-y-3 border border-gray-200">
+          <div key={idx} className="bg-gray-50 dark:bg-gray-800/60 rounded-xl p-4 space-y-3 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
-              <span className="font-semibold text-sm text-gray-700">Section {section.sectionOrder}</span>
+              <span className="font-semibold text-sm text-gray-700 dark:text-gray-300">
+                Bo'lim {section.sectionOrder}
+              </span>
               {sections.length > 1 && (
-                <button type="button" onClick={() => removeSection(idx)}
-                  className="text-red-500 hover:text-red-700 text-sm">Remove</button>
+                <button
+                  type="button"
+                  onClick={() => removeSection(idx)}
+                  className="text-xs text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-semibold transition-colors"
+                >
+                  O'chirish
+                </button>
               )}
             </div>
 
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="text-xs text-gray-500 mb-1 block">Type</label>
-                <select value={section.sectionType}
+                <label className={labelClass}>Turi</label>
+                <select
+                  value={section.sectionType}
                   onChange={e => updateSection(idx, 'sectionType', e.target.value as SectionType)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white">
+                  className={inputClass}
+                >
                   <option value="VOCABULARY">Vocabulary</option>
                   <option value="GRAMMAR">Grammar</option>
                 </select>
               </div>
               <div>
-                <label className="text-xs text-gray-500 mb-1 block">Questions</label>
-                <input type="number" min={1} max={100} value={section.numberOfQuestions}
+                <label className={labelClass}>Savollar</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={100}
+                  value={section.numberOfQuestions}
                   onChange={e => updateSection(idx, 'numberOfQuestions', parseInt(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+                  className={inputClass}
+                />
               </div>
               <div>
-                <label className="text-xs text-gray-500 mb-1 block">Time (min)</label>
-                <input type="number" min={1} max={180} value={section.timeAllocated}
+                <label className={labelClass}>Vaqt (min)</label>
+                <input
+                  type="number"
+                  min={1}
+                  max={180}
+                  value={section.timeAllocated}
                   onChange={e => updateSection(idx, 'timeAllocated', parseInt(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 outline-none" />
+                  className={inputClass}
+                />
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      <button type="submit" disabled={loading}
-        className="w-full py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 disabled:opacity-50 transition-colors">
-        {loading ? 'Creating...' : 'Create Test & Generate PIN'}
+      <button
+        type="submit"
+        disabled={loading}
+        className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold disabled:opacity-50 transition-colors shadow-lg shadow-blue-500/20 text-sm"
+      >
+        {loading ? 'Yaratilmoqda...' : 'Test yaratish va PIN generatsiya qilish'}
       </button>
     </form>
   );

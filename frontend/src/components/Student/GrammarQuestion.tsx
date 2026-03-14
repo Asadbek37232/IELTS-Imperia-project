@@ -1,3 +1,4 @@
+import React from 'react';
 import { ClientGrammarQuestion, ClientGrammarSubQuestion, SubmitAnswer } from '../../types';
 
 interface Props {
@@ -219,7 +220,7 @@ export default function GrammarQuestion({ passage, answers, onAnswer, passageInd
       </div>
 
       {/* Two-panel body */}
-      <div className="flex" style={{ minHeight: '420px', maxHeight: '620px' }}>
+      <div className="flex" style={{ minHeight: '500px', maxHeight: '75vh' }}>
         {/* Left: passage */}
         <div className="w-[55%] overflow-y-auto p-5 bg-slate-50 dark:bg-gray-950 border-r border-gray-200 dark:border-gray-800">
           {passage.audio_path && (

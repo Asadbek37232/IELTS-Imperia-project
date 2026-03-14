@@ -78,7 +78,7 @@ export default function TestTaking() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors">
       {/* Sticky header */}
       <div className="sticky top-0 z-20 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 shadow-sm">
-        <div className="max-w-2xl mx-auto px-4 py-3">
+        <div className="max-w-5xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <div>
               <p className="font-bold text-gray-900 dark:text-white text-sm">{title}</p>
@@ -102,10 +102,10 @@ export default function TestTaking() {
         </div>
       </div>
 
-      <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
-        {/* Vocabulary */}
+      <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+        {/* Vocabulary — centered narrow column */}
         {isVocab && vocabQs.length > 0 && (
-          <>
+          <div className="max-w-2xl mx-auto space-y-6">
             <VocabularyQuestion
               key={vocabQs[currentVocabIdx].id}
               question={vocabQs[currentVocabIdx]}
@@ -159,10 +159,10 @@ export default function TestTaking() {
                 </button>
               )}
             </div>
-          </>
+          </div>
         )}
 
-        {/* Grammar */}
+        {/* Grammar — full width two-panel layout */}
         {!isVocab && grammarPs.map((pp, i) => (
           <GrammarQuestion
             key={pp.id}
