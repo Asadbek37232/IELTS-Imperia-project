@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  fullName    String
+  phoneNumber String   @unique
+  username    String   @unique
+  password    String
+  role        UserRole @default(STUDENT)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  testSessions  TestSession[]
+  results       Result[]
+  activeSessions ActiveSession[]
+
+  @@index([role])
+  @@index([username])
+}
+
+enum UserRole {
+  ADMIN
+  STUDENT
+}
+
+model TestSession {
+  id          String   @id @default(cuid())
+  pinCode     String   @unique
+  title       String
+  createdBy   String
+  createdByUser User   @relation(fields: [createdBy], references: [id], onDelete: Cascade)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sections       TestSection[]
+  results        Result[]
+  activeSessions ActiveSession[]
+
+  @@index([pinCode])
+  @@index([isActive])
+}
+
+model TestSection {
+  id                String      @id @default(cuid())
+  testSessionId     String
+  testSession       TestSession @relation(fields: [testSessionId], references: [id], onDelete: Cascade)
+  sectionType       SectionType
+  numberOfQuestions Int
+  timeAllocated     Int
+  sectionOrder      Int
+  exerciseIds       String?     // JSON array of specific exercise IDs
+  createdAt         DateTime    @default(now())
+
+  @@unique([testSessionId, sectionOrder])
+  @@index([testSessionId])
+}
+
+enum SectionType {
+  VOCABULARY
+  GRAMMAR
+}
+
+model Result {
+  id            String   @id @default(cuid())
+  studentId     String
+  student       User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  testSessionId String
+  testSession   TestSession @relation(fields: [testSessionId], references: [id], onDelete: Cascade)
+
+  totalScore     Float
+  vocabScore     Float?
+  grammarScore   Float?
+  vocabCorrect   Int?
+  vocabTotal     Int?
+  grammarCorrect Int?
+  grammarTotal   Int?
+
+  submittedAt DateTime @default(now())
+  isCompleted Boolean  @default(true)
+
+  answers StudentAnswer[]
+
+  @@unique([studentId, testSessionId])
+  @@index([studentId])
+  @@index([testSessionId])
+}
+
+model StudentAnswer {
+  id             String      @id @default(cuid())
+  resultId       String
+  result         Result      @relation(fields: [resultId], references: [id], onDelete: Cascade)
+  questionId     String
+  questionType   SectionType
+  questionText   String
+  selectedAnswer String
+  correctAnswer  String
+  isCorrect      Boolean
+  createdAt      DateTime    @default(now())
+
+  @@index([resultId])
+}
+
+model ActiveSession {
+  id              String      @id @default(cuid())
+  studentId       String
+  student         User        @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  testSessionId   String
+  testSession     TestSession @relation(fields: [testSessionId], references: [id], onDelete: Cascade)
+  pinCode         String
+
+  currentSection  SectionType
+  sectionOrder    Int         @default(1)
+  sectionDeadline DateTime
+
+  tabSwitchCount  Int      @default(0)
+  lastActive      DateTime @default(now())
+  isActive        Boolean  @default(true)
+
+  createdAt DateTime @default(now())
+
+  @@index([studentId])
+  @@index([testSessionId])
+  @@index([pinCode])
+}

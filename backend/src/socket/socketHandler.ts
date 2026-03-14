@@ -1,0 +1,76 @@
+import { Server as HttpServer } from 'http';
+import { Server, Socket } from 'socket.io';
+import jwt from 'jsonwebtoken';
+import { ENV } from '../config/env';
+import { JwtPayload } from '../types';
+
+let io: Server;
+
+export function initSocket(httpServer: HttpServer): Server {
+  io = new Server(httpServer, {
+    cors: { origin: ENV.CLIENT_URL, credentials: true },
+    pingTimeout: 60000,
+  });
+
+  io.use((socket: Socket, next) => {
+    const token = socket.handshake.auth?.token;
+    if (!token) return next(new Error('Authentication required'));
+
+    try {
+      const decoded = jwt.verify(token, ENV.JWT_SECRET) as JwtPayload;
+      (socket as Socket & { user: JwtPayload }).user = decoded;
+      next();
+    } catch {
+      next(new Error('Invalid token'));
+    }
+  });
+
+  io.on('connection', (socket: Socket) => {
+    const user = (socket as Socket & { user: JwtPayload }).user;
+    console.log(`[Socket] Connected: ${user.username} (${user.role})`);
+
+    // Admins join admin room for live monitoring
+    if (user.role === 'ADMIN') {
+      socket.join('admin_room');
+      console.log(`[Socket] Admin ${user.username} joined admin_room`);
+    }
+
+    // Students join their own room + test room
+    if (user.role === 'STUDENT') {
+      socket.join(`student_${user.userId}`);
+
+      socket.on('join_test_room', (testSessionId: string) => {
+        socket.join(`test_${testSessionId}`);
+        console.log(`[Socket] Student ${user.username} joined test room ${testSessionId}`);
+      });
+
+      socket.on('heartbeat', (data: { testSessionId: string }) => {
+        // Update last active
+        io.to('admin_room').emit('student_heartbeat', {
+          studentId: user.userId,
+          username: user.username,
+          testSessionId: data.testSessionId,
+          timestamp: new Date(),
+        });
+      });
+    }
+
+    socket.on('disconnect', () => {
+      console.log(`[Socket] Disconnected: ${user.username}`);
+      if (user.role === 'STUDENT') {
+        io.to('admin_room').emit('student_disconnected', {
+          studentId: user.userId,
+          username: user.username,
+          timestamp: new Date(),
+        });
+      }
+    });
+  });
+
+  return io;
+}
+
+export function getIO(): Server {
+  if (!io) throw new Error('Socket.io not initialized');
+  return io;
+}

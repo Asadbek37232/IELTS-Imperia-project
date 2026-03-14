@@ -1,0 +1,61 @@
+import axios from 'axios';
+import { getToken, removeToken } from '../utils/tokenStorage';
+
+const api = axios.create({
+  baseURL: '/api',
+  timeout: 15000,
+});
+
+api.interceptors.request.use(config => {
+  const token = getToken();
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+api.interceptors.response.use(
+  res => res,
+  err => {
+    if (err.response?.status === 401) {
+      removeToken();
+      window.location.href = '/login';
+    }
+    return Promise.reject(err);
+  }
+);
+
+// ─── Auth ─────────────────────────────────────────────────────────────────────
+
+export const authApi = {
+  register: (data: { fullName: string; phoneNumber: string; username: string; password: string }) =>
+    api.post('/auth/register', data),
+  login: (username: string, password: string) =>
+    api.post('/auth/login', { username, password }),
+  getMe: () => api.get('/auth/me'),
+};
+
+// ─── Admin ────────────────────────────────────────────────────────────────────
+
+export const adminApi = {
+  getDashboard: () => api.get('/admin/dashboard'),
+  createTest: (data: { title: string; sections: object[] }) => api.post('/admin/tests', data),
+  getTests: () => api.get('/admin/tests'),
+  toggleTest: (id: string) => api.patch(`/admin/tests/${id}/toggle`),
+  getStudents: () => api.get('/admin/students'),
+  getResults: () => api.get('/admin/results'),
+  getLiveSessions: () => api.get('/admin/live'),
+};
+
+// ─── Student ──────────────────────────────────────────────────────────────────
+
+export const studentApi = {
+  getDashboard: () => api.get('/student/dashboard'),
+  joinTest: (pin: string) => api.post('/student/test/join', { pin }),
+  advanceSection: (testSessionId: string) => api.post('/student/test/advance', { testSessionId }),
+  submitTest: (testSessionId: string, answers: object[]) =>
+    api.post(`/student/test/${testSessionId}/submit`, { answers }),
+  reportTabSwitch: (testSessionId: string) =>
+    api.post('/student/test/tab-switch', { testSessionId }),
+  getActiveSession: () => api.get('/student/test/active'),
+  getResults: () => api.get('/student/results'),
+  getResultDetail: (id: string) => api.get(`/student/results/${id}`),
+};
