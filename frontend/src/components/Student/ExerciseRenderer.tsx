@@ -52,7 +52,7 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer }: Props)
               type="text"
               value={val}
               onChange={e => recordAnswer(q, e.target.value)}
-              className={`border-b-2 bg-transparent font-serif px-1 w-24 text-[15px] focus:outline-none transition-all
+              className={`border-b-2 bg-transparent font-serif px-1 w-48 text-[15px] focus:outline-none transition-all
                 ${val
                   ? 'border-orange-400 text-gray-900 dark:text-gray-100'
                   : 'border-gray-300 dark:border-gray-600 text-gray-400'
@@ -96,27 +96,52 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer }: Props)
             <InstructionBox text={exercise.instruction} />
             {exercise.questions.map(q => {
               const val = getAnswer(q.id);
+              const parts = q.text.split('___');
+
               return (
-                <div key={q.id} className="flex items-start gap-4">
-                  <span className="text-sm font-serif font-bold text-gray-900 dark:text-gray-100 flex-shrink-0 mt-1 w-5">
-                    {q.id}
+                <div key={q.id} className="flex items-start gap-3">
+                  <span className="text-sm font-serif font-bold text-gray-900 dark:text-gray-100 flex-shrink-0 mt-0.5 w-5">
+                    {q.id}.
                   </span>
                   <div className="flex-1">
-                    <p className="text-sm font-serif text-gray-600 dark:text-gray-400 mb-1.5 leading-snug">
-                      {q.text}
+                    <p className="text-[16px] font-serif text-gray-800 dark:text-gray-200 leading-relaxed inline">
+                      {parts.map((part, i) => (
+                        <span key={i}>
+                          {part}
+                          {i < parts.length - 1 && (
+                            <input
+                              type="text"
+                              value={val}
+                              onChange={e => recordAnswer(q, e.target.value)}
+                              className={`border-b-2 bg-transparent font-serif px-1 mx-1 w-48 text-center text-[16px] focus:outline-none transition-all py-0.5 inline-block
+                                ${val
+                                  ? 'border-orange-400 text-gray-900 dark:text-gray-100 font-medium'
+                                  : 'border-gray-300 dark:border-gray-600 text-gray-400'
+                                }
+                                focus:border-orange-500`}
+                              placeholder="..."
+                            />
+                          )}
+                        </span>
+                      ))}
                     </p>
-                    <input
-                      type="text"
-                      value={val}
-                      onChange={e => recordAnswer(q, e.target.value)}
-                      className={`border-b-2 bg-transparent font-serif px-1 w-full text-[16px] focus:outline-none transition-all py-0.5
-                        ${val
-                          ? 'border-orange-400 text-gray-900 dark:text-gray-100'
-                          : 'border-gray-300 dark:border-gray-600'
-                        }
-                        focus:border-orange-500`}
-                      placeholder="Your answer..."
-                    />
+                    {/* Fallback if question text does not contain ___ */}
+                    {parts.length === 1 && (
+                      <div className="mt-2">
+                        <input
+                          type="text"
+                          value={val}
+                          onChange={e => recordAnswer(q, e.target.value)}
+                          className={`border-b-2 bg-transparent font-serif px-1 w-full text-[16px] focus:outline-none transition-all py-0.5
+                            ${val
+                              ? 'border-orange-400 text-gray-900 dark:text-gray-100'
+                              : 'border-gray-300 dark:border-gray-600'
+                            }
+                            focus:border-orange-500`}
+                          placeholder="Your answer..."
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               );
@@ -190,15 +215,14 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer }: Props)
                         key={opt}
                         type="button"
                         onClick={() => recordAnswer(q, opt)}
-                        className={`px-3 py-1.5 rounded-lg border text-xs font-bold transition-all ${
-                          chosen === opt
-                            ? opt === 'TRUE'
-                              ? 'bg-emerald-500 border-emerald-500 text-white shadow-md'
-                              : opt === 'FALSE'
-                                ? 'bg-red-500 border-red-500 text-white shadow-md'
-                                : 'bg-orange-500 border-orange-500 text-white shadow-md'
-                            : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-500 hover:border-gray-400'
-                        }`}
+                        className={`px-3 py-1.5 rounded-lg border text-xs font-bold transition-all ${chosen === opt
+                          ? opt === 'TRUE'
+                            ? 'bg-emerald-500 border-emerald-500 text-white shadow-md'
+                            : opt === 'FALSE'
+                              ? 'bg-red-500 border-red-500 text-white shadow-md'
+                              : 'bg-orange-500 border-orange-500 text-white shadow-md'
+                          : 'bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 text-gray-500 hover:border-gray-400'
+                          }`}
                       >
                         {opt}
                       </button>
@@ -295,7 +319,7 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer }: Props)
                       {highlightedText}
                     </p>
                   </div>
-                  <div className="pl-5 flex items-center gap-3">
+                  <div className="pl-5 flex flex-wrap items-center gap-3">
                     <span className="text-xs text-gray-400 font-medium">Correction:</span>
                     <input
                       type="text"
@@ -309,6 +333,13 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer }: Props)
                         focus:border-emerald-500`}
                       placeholder="Correct word..."
                     />
+                    <button
+                      type="button"
+                      onClick={() => recordAnswer(q, '✔️')}
+                      className="px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider bg-gray-100 dark:bg-gray-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 text-gray-600 dark:text-gray-400 hover:text-emerald-700 dark:hover:text-emerald-400 rounded-md transition-colors border border-gray-200 dark:border-gray-700 whitespace-nowrap shadow-sm"
+                    >
+                      Correct ✔️
+                    </button>
                   </div>
                 </div>
               );
@@ -336,7 +367,7 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer }: Props)
                       type="text"
                       value={val}
                       onChange={e => recordAnswer(q, e.target.value)}
-                      className={`border-b-2 bg-transparent font-serif px-1 mx-1 text-[15px] focus:outline-none transition-all w-40 py-0.5 inline-block
+                      className={`border-b-2 bg-transparent font-serif px-1 mx-1 text-[15px] focus:outline-none transition-all w-56 py-0.5 inline-block
                         ${val
                           ? 'border-orange-400 text-gray-900 dark:text-gray-100'
                           : 'border-gray-300 dark:border-gray-600 text-gray-400'

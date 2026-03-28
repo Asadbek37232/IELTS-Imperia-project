@@ -37,12 +37,46 @@ export async function joinTest(studentId: string, pin: string) {
   const existing = await prisma.activeSession.findFirst({
     where: { studentId, isActive: true },
   });
-  if (existing) throw new Error('You are already in an active test');
 
   const session = await validatePinAndGetSections(pin);
   const sections = session.sections;
-
   if (sections.length === 0) throw new Error('Test has no sections configured');
+
+  if (existing) {
+    if (existing.pinCode === pin && existing.testSessionId === session.id) {
+      // Resume the existing session
+      const currentSection = sections.find(s => s.sectionOrder === existing.sectionOrder);
+      if (!currentSection) throw new Error('Active section not found in test definition');
+
+      const selectedExercisesMap: Record<string, string[]> = JSON.parse(existing.selectedExercises);
+      const exerciseIds = selectedExercisesMap[String(currentSection.sectionOrder)] || [];
+      const currentClientExercises = getClientExercisesForSection(currentSection, exerciseIds);
+
+      return {
+        testSessionId: session.id,
+        title: session.title,
+        sections: sections.map(s => ({
+          subject: s.subject,
+          variantGroups: JSON.parse(s.variantGroups),
+          numberOfExercises: s.numberOfExercises,
+          timeAllocated: s.timeAllocated,
+          sectionOrder: s.sectionOrder,
+        })),
+        currentSection: {
+          subject: currentSection.subject,
+          sectionOrder: currentSection.sectionOrder,
+          deadline: existing.sectionDeadline,
+          exercises: currentClientExercises,
+        },
+      };
+    } else {
+      // Automatically close the old dangling session from another test
+      await prisma.activeSession.update({
+        where: { id: existing.id },
+        data: { isActive: false },
+      });
+    }
+  }
 
   // Check attempt count
   const previousAttempts = await prisma.result.count({

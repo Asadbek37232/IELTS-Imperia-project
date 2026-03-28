@@ -146,16 +146,16 @@ export default function TestTaking() {
       </main>
 
       {/* Bottom navigation — Part buttons */}
-      <div className="flex-shrink-0 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 py-3 px-6 flex justify-center items-center gap-2 z-40">
+      <div className="flex-shrink-0 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 py-3 px-4 sm:px-6 flex justify-between items-center gap-2 z-40">
         <button
           onClick={() => setCurrentExerciseIdx(i => Math.max(0, i - 1))}
           disabled={currentExerciseIdx === 0}
-          className="px-4 py-2 rounded-lg border border-gray-100 dark:border-gray-700 text-gray-400 dark:text-gray-500 disabled:opacity-20 text-xs font-bold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          className="flex-shrink-0 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg border border-gray-100 dark:border-gray-700 text-gray-400 dark:text-gray-500 disabled:opacity-20 text-xs font-bold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
         >
           &lsaquo; Prev
         </button>
 
-        <div className="flex gap-1.5">
+        <div className="flex-1 overflow-x-auto no-scrollbar flex items-center justify-start gap-1.5 px-2">
           {exercises.map((ex, i) => {
             const answered = exerciseAnsweredCounts[i];
             const total = ex.questions.length;
@@ -167,13 +167,12 @@ export default function TestTaking() {
                 key={ex.id}
                 onClick={() => setCurrentExerciseIdx(i)}
                 title={`${answered}/${total} answered`}
-                className={`px-4 py-2 rounded-lg border text-xs font-bold transition-all ${
-                  isCurrent
+                className={`flex-shrink-0 px-3 py-1.5 rounded-lg border text-[11px] sm:text-xs font-bold transition-all ${isCurrent
                     ? 'bg-[#E31E24] border-[#E31E24] text-white shadow-md'
                     : isComplete
                       ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-700 text-emerald-700 dark:text-emerald-400'
                       : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-300'
-                }`}
+                  }`}
               >
                 {i + 1}-Part
               </button>
@@ -184,7 +183,7 @@ export default function TestTaking() {
         {currentExerciseIdx < exercises.length - 1 ? (
           <button
             onClick={() => setCurrentExerciseIdx(i => Math.min(exercises.length - 1, i + 1))}
-            className="px-4 py-2 rounded-lg border border-gray-100 dark:border-gray-700 text-gray-400 dark:text-gray-500 text-xs font-bold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+            className="flex-shrink-0 px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg border border-gray-100 dark:border-gray-700 text-gray-400 dark:text-gray-500 text-xs font-bold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
           >
             Next &rsaquo;
           </button>
@@ -192,7 +191,7 @@ export default function TestTaking() {
           <button
             onClick={submitSection}
             disabled={submitting}
-            className="px-6 py-2 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 disabled:opacity-50 text-xs shadow-md transition-all"
+            className="flex-shrink-0 px-4 py-1.5 sm:px-6 sm:py-2 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 disabled:opacity-50 text-[11px] sm:text-xs shadow-md transition-all whitespace-nowrap"
           >
             {submitting ? 'Saving...' : isLast ? 'Submit ✓' : 'Next Section →'}
           </button>

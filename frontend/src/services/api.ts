@@ -3,10 +3,11 @@ import { getToken, removeToken } from '../utils/tokenStorage';
 
 // In production (Vercel), VITE_API_URL points to the Railway backend.
 // In development, VITE_API_URL is empty so Vite proxy handles /api -> localhost:5000.
-const backendOrigin = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 const baseURL = import.meta.env.VITE_API_URL
   ? `${import.meta.env.VITE_API_URL}/api`
   : '/api';
+
+const backendOrigin = import.meta.env.VITE_API_URL || '';
 
 export const uploadsURL = (relativePath: string) =>
   `${backendOrigin}/uploads/${relativePath}`;
