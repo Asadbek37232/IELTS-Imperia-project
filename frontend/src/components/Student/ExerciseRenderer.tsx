@@ -335,10 +335,10 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer }: Props)
                     />
                     <button
                       type="button"
-                      onClick={() => recordAnswer(q, '✔️')}
+                      onClick={() => recordAnswer(q, '✓')}
                       className="px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider bg-gray-100 dark:bg-gray-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 text-gray-600 dark:text-gray-400 hover:text-emerald-700 dark:hover:text-emerald-400 rounded-md transition-colors border border-gray-200 dark:border-gray-700 whitespace-nowrap shadow-sm"
                     >
-                      Correct ✔️
+                      Correct ✓
                     </button>
                   </div>
                 </div>

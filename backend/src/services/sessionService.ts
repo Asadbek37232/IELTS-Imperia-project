@@ -43,7 +43,9 @@ export async function joinTest(studentId: string, pin: string) {
   if (sections.length === 0) throw new Error('Test has no sections configured');
 
   if (existing) {
-    if (existing.pinCode === pin && existing.testSessionId === session.id) {
+    const isExpired = new Date() > new Date(existing.sectionDeadline);
+
+    if (existing.pinCode === pin && existing.testSessionId === session.id && !isExpired) {
       // Resume the existing session
       const currentSection = sections.find(s => s.sectionOrder === existing.sectionOrder);
       if (!currentSection) throw new Error('Active section not found in test definition');
@@ -70,7 +72,7 @@ export async function joinTest(studentId: string, pin: string) {
         },
       };
     } else {
-      // Automatically close the old dangling session from another test
+      // Automatically close the old session (either expired or from another test)
       await prisma.activeSession.update({
         where: { id: existing.id },
         data: { isActive: false },

@@ -4,14 +4,24 @@ import { getAnswerMap, clearAnswerMap } from './sessionService';
 import { loadAllExercises, loadExercisesFromGroups } from '../utils/questionLoader';
 
 function gradeAnswer(selected: string, correct: string): boolean {
+  if (!selected || !correct) return false;
+
   const sel = selected.trim().toLowerCase();
+  const cor = correct.trim().toLowerCase();
+
+  // Normalize checkmarks: standardize to U+2713 (✓)
+  const normalize = (s: string) => s
+    .replace(/[✔️✅☑️]/g, '✓')
+    .replace(/\s/g, '');
+
+  const nSel = normalize(sel);
 
   // Handle multiple accepted answers (pipe-separated)
-  if (correct.includes('|||')) {
-    return correct.split('|||').some(c => sel === c.trim().toLowerCase());
+  if (cor.includes('|||')) {
+    return cor.split('|||').some(c => nSel === normalize(c.trim().toLowerCase()));
   }
 
-  return sel === correct.trim().toLowerCase();
+  return nSel === normalize(cor);
 }
 
 export async function submitTest(studentId: string, testSessionId: string, answers: SubmitAnswer[]) {
@@ -68,6 +78,12 @@ export async function submitTest(studentId: string, testSessionId: string, answe
 
   const userAnswersMap = new Map(answers.map(a => [a.questionId, a]));
 
+  console.log(`[SubmitTest] Student: ${studentId}, Test: ${testSessionId}`);
+  console.log(`[SubmitTest] Incoming answers count: ${answers.length}`);
+  if (answers.length > 0) {
+    console.log(`[SubmitTest] First answer key example: ${answers[0].questionId}`);
+  }
+
   let vocabCorrect = 0, vocabTotal = 0;
   let grammarCorrect = 0, grammarTotal = 0;
 
@@ -85,6 +101,10 @@ export async function submitTest(studentId: string, testSessionId: string, answe
     } else {
       grammarTotal++;
       if (isCorrect) grammarCorrect++;
+    }
+
+    if (rq.questionId.includes('grammar_5_10_016')) {
+      console.log(`[Debug Mapping] RQ_ID: ${rq.questionId}, Found in Map: ${!!userAns}, Selected: "${selectedAnswer}"`);
     }
 
     return {
