@@ -92,6 +92,7 @@ export interface CurrentSection {
   sectionOrder: number;
   deadline: string;
   exercises: ClientExercise[];
+  answers?: SubmitAnswer[];
 }
 
 export interface JoinTestResponse {

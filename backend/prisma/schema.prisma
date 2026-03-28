@@ -125,6 +125,7 @@ model ActiveSession {
 
   // JSON: selected exercise IDs per section order: {"1": ["grammar_1_5_001", ...], "2": [...]}
   selectedExercises String       @default("{}")
+  answers           String       @default("[]") // JSON: array of SubmitAnswer
 
   tabSwitchCount  Int      @default(0)
   lastActive      DateTime @default(now())

@@ -55,9 +55,11 @@ export const adminApi = {
 export const studentApi = {
   getDashboard: () => api.get('/student/dashboard'),
   joinTest: (pin: string) => api.post('/student/test/join', { pin }),
-  advanceSection: (testSessionId: string) => api.post('/student/test/advance', { testSessionId }),
+  advanceSection: (testSessionId: string, answers?: object[]) => api.post('/student/test/advance', { testSessionId, answers }),
   submitTest: (testSessionId: string, answers: object[]) =>
     api.post(`/student/test/${testSessionId}/submit`, { answers }),
+  saveAnswers: (testSessionId: string, answers: object[]) =>
+    api.post('/student/test/save-answers', { testSessionId, answers }),
   reportTabSwitch: (testSessionId: string) =>
     api.post('/student/test/tab-switch', { testSessionId }),
   getActiveSession: () => api.get('/student/test/active'),

@@ -44,7 +44,8 @@ export default function TestTaking() {
       const ord = currentSection?.sectionOrder ?? 1;
       const hasNext = sections.some(s => s.sectionOrder === ord + 1);
       if (hasNext) {
-        const res = await studentApi.advanceSection(testSessionId);
+        // Pass current answers when advancing to ensure they are saved in DB
+        const res = await studentApi.advanceSection(testSessionId, getAllAnswers());
         goToNextSection(res.data.data);
       } else {
         const res = await studentApi.submitTest(testSessionId, getAllAnswers());
@@ -55,13 +56,23 @@ export default function TestTaking() {
         }
         goToNextSection(null);
       }
-    } catch {
-      navigate('/student/results', { replace: true });
-      goToNextSection(null);
+    } catch (err) {
+      console.error('Submit/Advance error:', err);
+      alert('Xatolik yuz berdi. Iltimos, internetingizni tekshirib qaytadan urinib ko\'ring.');
+      // Do NOT navigate to results on failure, let student retry
     } finally {
       setSubmitting(false);
     }
   }, [testSessionId, submitting, currentSection, sections, getAllAnswers, goToNextSection, navigate]);
+
+  // Periodic Auto-save (every 30 seconds)
+  useEffect(() => {
+    if (!testSessionId || phase !== 'in-section') return;
+    const interval = setInterval(() => {
+      studentApi.saveAnswers(testSessionId, getAllAnswers()).catch(e => console.warn('Autosave failed:', e));
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [testSessionId, getAllAnswers, phase]);
 
   useEffect(() => {
     if (phase === 'idle' && (!currentSection || !testSessionId)) {

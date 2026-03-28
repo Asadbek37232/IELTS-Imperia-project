@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { z } from 'zod';
 import { AuthRequest, SubmitAnswer } from '../types';
-import { joinTest, advanceSection, recordTabSwitch } from '../services/sessionService';
+import { joinTest, advanceSection, recordTabSwitch, updateActiveAnswers } from '../services/sessionService';
 import { submitTest } from '../services/resultService';
 import prisma from '../config/database';
 import { getIO } from '../socket/socketHandler';
@@ -46,16 +46,31 @@ export async function handleJoinTest(req: AuthRequest, res: Response): Promise<v
 
 export async function handleAdvanceSection(req: AuthRequest, res: Response): Promise<void> {
   try {
-    const { testSessionId } = req.body;
+    const { testSessionId, answers } = req.body;
     if (!testSessionId) {
       res.status(400).json({ success: false, message: 'testSessionId required' });
       return;
     }
-    const nextSection = await advanceSection(req.user!.userId, testSessionId);
+    const nextSection = await advanceSection(req.user!.userId, testSessionId, (answers || []) as SubmitAnswer[]);
     res.json({ success: true, data: nextSection });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Failed to advance section';
     res.status(400).json({ success: false, message });
+  }
+}
+
+export async function handleSubmitAnswers(req: AuthRequest, res: Response): Promise<void> {
+  try {
+    const { testSessionId, answers } = req.body;
+    if (!testSessionId || !answers) {
+      res.status(400).json({ success: false, message: 'testSessionId and answers required' });
+      return;
+    }
+    await updateActiveAnswers(req.user!.userId, testSessionId, answers as SubmitAnswer[]);
+    res.json({ success: true });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : 'Failed to save answers';
+    res.status(500).json({ success: false, message });
   }
 }
 

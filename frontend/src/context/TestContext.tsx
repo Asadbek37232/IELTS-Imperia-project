@@ -39,7 +39,18 @@ export function TestProvider({ children }: { children: React.ReactNode }) {
     setTitle(data.title);
     setSections(data.sections);
     setCurrentSection(data.currentSection);
-    setAnswers({});
+
+    // Restore answers if any (from Resume logic)
+    if (data.currentSection?.answers) {
+      const restored: Record<string, SubmitAnswer> = {};
+      data.currentSection.answers.forEach(a => {
+        restored[a.questionId] = a;
+      });
+      setAnswers(restored);
+    } else {
+      setAnswers({});
+    }
+
     setPhase('in-section');
   }, []);
 

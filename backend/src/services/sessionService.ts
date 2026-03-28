@@ -1,5 +1,5 @@
 import prisma from '../config/database';
-import { SectionSubject } from '../types';
+import { SectionSubject, SubmitAnswer } from '../types';
 import {
   loadExercisesFromGroups,
   loadAllExercises,
@@ -69,6 +69,7 @@ export async function joinTest(studentId: string, pin: string) {
           sectionOrder: currentSection.sectionOrder,
           deadline: existing.sectionDeadline,
           exercises: currentClientExercises,
+          answers: JSON.parse(existing.answers || '[]'),
         },
       };
     } else {
@@ -165,11 +166,17 @@ export async function joinTest(studentId: string, pin: string) {
 
 // ─── Advance to next section ──────────────────────────────────────────────────
 
-export async function advanceSection(studentId: string, testSessionId: string) {
+export async function advanceSection(studentId: string, testSessionId: string, currentAnswers: SubmitAnswer[]) {
   const activeSession = await prisma.activeSession.findFirst({
     where: { studentId, testSessionId, isActive: true },
   });
   if (!activeSession) throw new Error('No active session found');
+
+  // Save progress: merge current answers into DB
+  const existingAnswers: SubmitAnswer[] = JSON.parse(activeSession.answers || '[]');
+  const newAnswersMap = new Map(existingAnswers.map(a => [a.questionId, a]));
+  currentAnswers.forEach(a => newAnswersMap.set(a.questionId, a));
+  const mergedAnswers = Array.from(newAnswersMap.values());
 
   const allSections = await prisma.testSection.findMany({
     where: { testSessionId },
@@ -182,7 +189,7 @@ export async function advanceSection(studentId: string, testSessionId: string) {
     // No more sections — session ended
     await prisma.activeSession.update({
       where: { id: activeSession.id },
-      data: { isActive: false },
+      data: { isActive: false, answers: JSON.stringify(mergedAnswers) },
     });
     return null;
   }
@@ -195,6 +202,7 @@ export async function advanceSection(studentId: string, testSessionId: string) {
       currentSubject: nextSection.subject as SectionSubject,
       sectionOrder: nextSection.sectionOrder,
       sectionDeadline,
+      answers: JSON.stringify(mergedAnswers),
     },
   });
 
@@ -249,4 +257,23 @@ export async function recordTabSwitch(studentId: string, testSessionId: string):
     where: { studentId, testSessionId, isActive: true },
   });
   return session?.tabSwitchCount || 0;
+}
+
+export async function updateActiveAnswers(studentId: string, testSessionId: string, answers: SubmitAnswer[]) {
+  const activeSession = await prisma.activeSession.findFirst({
+    where: { studentId, testSessionId, isActive: true },
+  });
+  if (!activeSession) return;
+
+  const existingAnswers: SubmitAnswer[] = JSON.parse(activeSession.answers || '[]');
+  const map = new Map(existingAnswers.map(a => [a.questionId, a]));
+  answers.forEach(a => map.set(a.questionId, a));
+
+  await prisma.activeSession.update({
+    where: { id: activeSession.id },
+    data: {
+      answers: JSON.stringify(Array.from(map.values())),
+      lastActive: new Date(),
+    },
+  });
 }

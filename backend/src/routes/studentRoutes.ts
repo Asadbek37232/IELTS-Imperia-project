@@ -8,6 +8,7 @@ import {
   handleTabSwitch,
   handleGetActiveSession,
   handleGetStudentDashboard,
+  handleSubmitAnswers,
 } from '../controllers/studentController';
 import { handleGetMyResults, handleGetResultDetail } from '../controllers/resultsController';
 
@@ -18,6 +19,7 @@ router.get('/dashboard', handleGetStudentDashboard);
 router.post('/test/join', handleJoinTest);
 router.post('/test/advance', handleAdvanceSection);
 router.post('/test/:testSessionId/submit', handleSubmitTest);
+router.post('/test/save-answers', handleSubmitAnswers);
 router.post('/test/tab-switch', handleTabSwitch);
 router.get('/test/active', handleGetActiveSession);
 router.get('/results', handleGetMyResults);
