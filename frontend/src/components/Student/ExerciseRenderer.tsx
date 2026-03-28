@@ -52,7 +52,7 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer }: Props)
               type="text"
               value={val}
               onChange={e => recordAnswer(q, e.target.value)}
-              className={`border-b-2 bg-transparent font-serif px-1 w-48 text-[15px] focus:outline-none transition-all
+              className={`border-b-2 bg-transparent font-serif px-1 w-64 text-[15px] focus:outline-none transition-all
                 ${val
                   ? 'border-orange-400 text-gray-900 dark:text-gray-100'
                   : 'border-gray-300 dark:border-gray-600 text-gray-400'
@@ -113,7 +113,7 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer }: Props)
                               type="text"
                               value={val}
                               onChange={e => recordAnswer(q, e.target.value)}
-                              className={`border-b-2 bg-transparent font-serif px-1 mx-1 w-48 text-center text-[16px] focus:outline-none transition-all py-0.5 inline-block
+                              className={`border-b-2 bg-transparent font-serif px-1 mx-1 w-64 text-center text-[16px] focus:outline-none transition-all py-0.5 inline-block
                                 ${val
                                   ? 'border-orange-400 text-gray-900 dark:text-gray-100 font-medium'
                                   : 'border-gray-300 dark:border-gray-600 text-gray-400'
@@ -367,7 +367,7 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer }: Props)
                       type="text"
                       value={val}
                       onChange={e => recordAnswer(q, e.target.value)}
-                      className={`border-b-2 bg-transparent font-serif px-1 mx-1 text-[15px] focus:outline-none transition-all w-56 py-0.5 inline-block
+                      className={`border-b-2 bg-transparent font-serif px-1 mx-1 text-[15px] focus:outline-none transition-all w-[300px] py-0.5 inline-block
                         ${val
                           ? 'border-orange-400 text-gray-900 dark:text-gray-100'
                           : 'border-gray-300 dark:border-gray-600 text-gray-400'

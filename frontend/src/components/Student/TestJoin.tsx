@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { studentApi } from '../../services/api';
 import { useTest } from '../../context/TestContext';
@@ -12,6 +12,13 @@ export default function TestJoin({ onClose }: Props) {
   const { initTest } = useTest();
   const navigate = useNavigate();
   const inputs = useRef<(HTMLInputElement | null)[]>([]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      inputs.current[0]?.focus();
+    }, 50);
+    return () => clearTimeout(timer);
+  }, []);
   const pin = digits.join('');
 
   const handleDigit = (idx: number, value: string) => {
@@ -76,7 +83,7 @@ export default function TestJoin({ onClose }: Props) {
 
       <button type="submit" disabled={loading || pin.length !== 4}
         className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl font-bold text-sm hover:from-blue-700 hover:to-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-lg shadow-blue-500/30 active:scale-[0.98]">
-        {loading ? <span className="flex items-center justify-center gap-2"><svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>Joining...</span> : 'Start Test →'}
+        {loading ? <span className="flex items-center justify-center gap-2"><svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>Joining...</span> : 'Start Test →'}
       </button>
     </form>
   );

@@ -1,6 +1,7 @@
 import prisma from '../config/database';
 import { SubmitAnswer } from '../types';
 import { getAnswerMap, clearAnswerMap } from './sessionService';
+import { loadAllExercises, loadExercisesFromGroups } from '../utils/questionLoader';
 
 function gradeAnswer(selected: string, correct: string): boolean {
   const sel = selected.trim().toLowerCase();
@@ -18,18 +19,67 @@ export async function submitTest(studentId: string, testSessionId: string, answe
     where: { studentId, testSessionId, isActive: true },
   });
 
-  const answerMap = getAnswerMap(studentId, testSessionId);
+  const testSession = await prisma.testSession.findUnique({
+    where: { id: testSessionId },
+    include: { sections: true },
+  });
+
+  if (!testSession || !activeSession) {
+    throw new Error('Test session or active session not found');
+  }
+
+  const selectedExercisesMap: Record<string, string[]> = JSON.parse(activeSession.selectedExercises);
+
+  // Build the master list of all required questions by loading them
+  const requiredQuestions: { questionId: string, questionType: 'VOCABULARY' | 'GRAMMAR', questionText: string, exactAnswer: string }[] = [];
+
+  for (const sec of testSession.sections) {
+    const variantGroups: string[] = JSON.parse(sec.variantGroups);
+    let pool;
+    if (variantGroups.length === 5) {
+      pool = loadAllExercises(sec.subject);
+    } else {
+      pool = loadExercisesFromGroups(sec.subject, variantGroups);
+    }
+
+    const exerciseIds = selectedExercisesMap[String(sec.sectionOrder)] || [];
+    for (const exId of exerciseIds) {
+      const ex = pool.find(e => e.id === exId);
+      if (ex) {
+        for (const q of ex.questions) {
+          const anyQ = q as Record<string, unknown>;
+          let exactAnswer = '';
+          if (Array.isArray(anyQ.answers) && anyQ.answers.length > 0) {
+            exactAnswer = (anyQ.answers as string[]).join('|||');
+          } else {
+            exactAnswer = q.answer || '';
+          }
+
+          requiredQuestions.push({
+            questionId: `${ex.id}_${q.id}`,
+            questionType: sec.subject as 'VOCABULARY' | 'GRAMMAR',
+            questionText: q.text || '',
+            exactAnswer
+          });
+        }
+      }
+    }
+  }
+
+  const userAnswersMap = new Map(answers.map(a => [a.questionId, a]));
 
   let vocabCorrect = 0, vocabTotal = 0;
   let grammarCorrect = 0, grammarTotal = 0;
 
-  const studentAnswers = answers.map(ans => {
-    const correctAnswer = answerMap[ans.questionId] || '';
-    // For multi-answer, use first answer as display
-    const displayCorrect = correctAnswer.includes('|||') ? correctAnswer.split('|||')[0] : correctAnswer;
-    const isCorrect = gradeAnswer(ans.selectedAnswer, correctAnswer);
+  const studentAnswers = requiredQuestions.map(rq => {
+    const userAns = userAnswersMap.get(rq.questionId);
+    const selectedAnswer = userAns ? userAns.selectedAnswer : '';
 
-    if (ans.questionType === 'VOCABULARY') {
+    const correctAnswer = rq.exactAnswer;
+    const displayCorrect = correctAnswer.includes('|||') ? correctAnswer.split('|||')[0] : correctAnswer;
+    const isCorrect = selectedAnswer ? gradeAnswer(selectedAnswer, correctAnswer) : false;
+
+    if (rq.questionType === 'VOCABULARY') {
       vocabTotal++;
       if (isCorrect) vocabCorrect++;
     } else {
@@ -38,10 +88,10 @@ export async function submitTest(studentId: string, testSessionId: string, answe
     }
 
     return {
-      questionId: ans.questionId,
-      questionType: ans.questionType,
-      questionText: ans.questionText,
-      selectedAnswer: ans.selectedAnswer,
+      questionId: rq.questionId,
+      questionType: rq.questionType,
+      questionText: rq.questionText,
+      selectedAnswer,
       correctAnswer: displayCorrect,
       isCorrect,
     };
