@@ -48,23 +48,29 @@ export default function TestTaking() {
         goToNextSection(res.data.data);
       } else {
         const res = await studentApi.submitTest(testSessionId, getAllAnswers());
-        goToNextSection(null);
         if (res?.data?.data?.id) {
-          navigate(`/student/results/${res.data.data.id}`);
+          navigate(`/student/results/${res.data.data.id}`, { replace: true });
         } else {
-          navigate('/student/results');
+          navigate('/student/results', { replace: true });
         }
+        goToNextSection(null);
       }
     } catch {
+      navigate('/student/results', { replace: true });
       goToNextSection(null);
-      navigate('/student/results');
     } finally {
       setSubmitting(false);
     }
   }, [testSessionId, submitting, currentSection, sections, getAllAnswers, goToNextSection, navigate]);
 
+  useEffect(() => {
+    if (!currentSection || !testSessionId) {
+      const timer = setTimeout(() => navigate('/student'), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [currentSection, testSessionId, navigate]);
+
   if (!currentSection || !testSessionId) {
-    navigate('/student');
     return null;
   }
 
