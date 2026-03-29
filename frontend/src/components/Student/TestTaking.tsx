@@ -17,6 +17,7 @@ export default function TestTaking() {
   const [submitting, setSubmitting] = useState(false);
   const [restoring, setRestoring] = useState(false);
   const [currentExerciseIdx, setCurrentExerciseIdx] = useState(0);
+  const [flaggedExercises, setFlaggedExercises] = useState<Set<number>>(new Set());
 
   // Settings Modal State
   const [showSettings, setShowSettings] = useState(false);
@@ -60,10 +61,20 @@ export default function TestTaking() {
     return () => clearInterval(interval);
   }, [testSessionId]);
 
-  // Reset exercise index when section changes
+  // Reset exercise index and flags when section changes
   useEffect(() => {
     setCurrentExerciseIdx(0);
+    setFlaggedExercises(new Set());
   }, [currentSection?.sectionOrder]);
+
+  const toggleFlag = (idx: number) => {
+    setFlaggedExercises(prev => {
+      const next = new Set(prev);
+      if (next.has(idx)) next.delete(idx);
+      else next.add(idx);
+      return next;
+    });
+  };
 
   const handleAnswer = useCallback((answer: SubmitAnswer) => {
     setAnswer(answer.questionId, answer);
@@ -223,6 +234,8 @@ export default function TestTaking() {
               exercise={currentExercise}
               answers={answers}
               onAnswer={handleAnswer}
+              isFlagged={flaggedExercises.has(currentExerciseIdx)}
+              onToggleFlag={() => toggleFlag(currentExerciseIdx)}
             />
           ) : null}
         </div>
@@ -247,19 +260,30 @@ export default function TestTaking() {
                 const total = ex.questions.length;
                 const isCurrent = i === currentExerciseIdx;
                 const isComplete = answered === total && total > 0;
+                const isFlaggedPart = flaggedExercises.has(i);
 
                 return (
                   <button
                     key={ex.id}
                     onClick={() => setCurrentExerciseIdx(i)}
-                    title={`${answered}/${total} answered`}
-                    className={`flex-shrink-0 px-3 py-1.5 rounded-lg border text-[11px] sm:text-xs font-bold transition-all ${isCurrent
-                      ? 'bg-[#E31E24] border-[#E31E24] text-white shadow-md'
-                      : isComplete
-                        ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-700 text-emerald-700 dark:text-emerald-400'
-                        : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-300'
-                      }`}
+                    title={`${answered}/${total} answered${isFlaggedPart ? ' · Belgilangan' : ''}`}
+                    className={`flex-shrink-0 px-3 py-1.5 rounded-lg border text-[11px] sm:text-xs font-bold transition-all flex items-center gap-1 ${
+                      isCurrent
+                        ? 'bg-[#E31E24] border-[#E31E24] text-white shadow-md'
+                        : isFlaggedPart && isComplete
+                          ? 'bg-amber-400 border-amber-400 text-white'
+                          : isFlaggedPart
+                            ? 'bg-white dark:bg-gray-900 border-amber-400 text-amber-600 dark:text-amber-400'
+                            : isComplete
+                              ? 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-700 text-emerald-700 dark:text-emerald-400'
+                              : 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-300'
+                    }`}
                   >
+                    {isFlaggedPart && !isCurrent && (
+                      <svg className="w-2.5 h-2.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2z" />
+                      </svg>
+                    )}
                     {i + 1}-Part
                   </button>
                 );

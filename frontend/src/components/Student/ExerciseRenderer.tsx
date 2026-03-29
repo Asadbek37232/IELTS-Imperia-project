@@ -6,6 +6,8 @@ interface Props {
   exercise: ClientExercise;
   answers: Record<string, SubmitAnswer>;
   onAnswer: (answer: SubmitAnswer) => void;
+  isFlagged?: boolean;
+  onToggleFlag?: () => void;
 }
 
 // ── Dialogue formatter ────────────────────────────────────────────────────────
@@ -48,7 +50,7 @@ function parseDialogue(raw: string): SpeakerLine[] | null {
 
 // ── Main component ────────────────────────────────────────────────────────────
 
-export default function ExerciseRenderer({ exercise, answers, onAnswer }: Props) {
+export default function ExerciseRenderer({ exercise, answers, onAnswer, isFlagged = false, onToggleFlag }: Props) {
   const getAnswer = (qId: number) => answers[`${exercise.id}_${qId}`]?.selectedAnswer || '';
 
   const recordAnswer = (q: ClientQuestion, value: string) => {
@@ -465,12 +467,32 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer }: Props)
         {hasLeftPanel && (
           <div className="w-1/2 overflow-y-auto p-12 pr-16 border-r border-gray-100 dark:border-gray-800 custom-scrollbar">
             <div className="max-w-3xl ml-auto">
-              <p className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] mb-6">
-                {subjectLabel} · {exercise.type.replace('_', ' ').toUpperCase()}
-              </p>
-              <h2 className="text-xl font-serif font-bold text-gray-900 dark:text-white mb-6">
-                {exercise.title}
-              </h2>
+              <div className="flex items-start justify-between gap-3 mb-6">
+                <div>
+                  <p className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] mb-1.5">
+                    {subjectLabel} · {exercise.type.replace('_', ' ').toUpperCase()}
+                  </p>
+                  <h2 className="text-xl font-serif font-bold text-gray-900 dark:text-white">
+                    {exercise.title}
+                  </h2>
+                </div>
+                {onToggleFlag && (
+                  <button
+                    type="button"
+                    onClick={onToggleFlag}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex-shrink-0 mt-1 ${
+                      isFlagged
+                        ? 'bg-amber-50 dark:bg-amber-950/30 border-amber-300 dark:border-amber-700 text-amber-600 dark:text-amber-400'
+                        : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 hover:border-amber-300 hover:text-amber-500'
+                    }`}
+                  >
+                    <svg className="w-3.5 h-3.5" fill={isFlagged ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+                    </svg>
+                    {isFlagged ? 'Belgilangan' : 'Belgilash'}
+                  </button>
+                )}
+              </div>
               {hasImage && (
                 <div className="mb-6">
                   <img
@@ -494,13 +516,31 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer }: Props)
         <div className={`${hasLeftPanel ? 'w-1/2' : 'w-full'} overflow-y-auto p-12 ${hasLeftPanel ? 'pl-16' : 'max-w-3xl mx-auto'} custom-scrollbar`}>
           <div className={hasLeftPanel ? 'max-w-3xl' : 'max-w-2xl mx-auto'}>
             {!hasLeftPanel && (
-              <div className="mb-8">
-                <p className="text-[12px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2">
-                  {subjectLabel} · {exercise.type.replace('_', ' ').toUpperCase()}
-                </p>
-                <h2 className="text-xl font-serif font-bold text-gray-900 dark:text-white">
-                  {exercise.title}
-                </h2>
+              <div className="mb-8 flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-[12px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2">
+                    {subjectLabel} · {exercise.type.replace('_', ' ').toUpperCase()}
+                  </p>
+                  <h2 className="text-xl font-serif font-bold text-gray-900 dark:text-white">
+                    {exercise.title}
+                  </h2>
+                </div>
+                {onToggleFlag && (
+                  <button
+                    type="button"
+                    onClick={onToggleFlag}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex-shrink-0 mt-1 ${
+                      isFlagged
+                        ? 'bg-amber-50 dark:bg-amber-950/30 border-amber-300 dark:border-amber-700 text-amber-600 dark:text-amber-400'
+                        : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 hover:border-amber-300 hover:text-amber-500'
+                    }`}
+                  >
+                    <svg className="w-3.5 h-3.5" fill={isFlagged ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+                    </svg>
+                    {isFlagged ? 'Belgilangan' : 'Belgilash'}
+                  </button>
+                )}
               </div>
             )}
             {renderQuestions()}
