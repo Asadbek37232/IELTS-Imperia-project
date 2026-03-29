@@ -1,4 +1,5 @@
 import LoginForm from '../components/Auth/LoginForm';
+import Logo from '../components/Common/Logo';
 
 export default function LoginPage() {
   return (
@@ -6,13 +7,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-5">
-            <div className="rounded-xl dark:bg-white dark:px-4 dark:py-2 transition-colors">
-              <img
-                src="/logo.png"
-                alt="IELTS Imperia"
-                className="h-12 w-auto object-contain"
-              />
-            </div>
+            <Logo className="h-12" wrapDark />
           </div>
           <h1 className="text-2xl font-black text-gray-900 dark:text-white">Platformaga kirish</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-1.5 text-sm">Davom etish uchun tizimga kiring</p>

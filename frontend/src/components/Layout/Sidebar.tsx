@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import Logo from '../Common/Logo';
 
 interface SidebarProps { isOpen: boolean; onClose: () => void; }
 
@@ -34,13 +35,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       `}>
         {/* Logo */}
         <div className="h-16 flex items-center px-5 border-b border-gray-100 dark:border-gray-800/50">
-          <div className="rounded-lg dark:bg-white dark:px-2.5 dark:py-1 transition-colors">
-            <img
-              src="/logo.png"
-              alt="IELTS Imperia"
-              className="h-8 w-auto object-contain"
-            />
-          </div>
+          <Logo className="h-8" wrapDark />
         </div>
 
         {/* Nav */}

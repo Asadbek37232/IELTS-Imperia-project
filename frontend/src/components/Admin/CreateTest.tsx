@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { adminApi } from '../../services/api';
-import { SectionSubject, SectionType, VARIANT_GROUPS, VARIANT_GROUP_LABELS, VariantGroup } from '../../types';
+import { VARIANT_GROUPS, VARIANT_GROUP_LABELS, VariantGroup } from '../../types';
 
 interface SectionForm {
-  subject: SectionSubject;
-  sectionType: SectionType;
+  subject: 'GRAMMAR' | 'VOCABULARY';
+  sectionType: 'EXERCISE' | 'PRACTICE_TEST';
   variantGroups: string[];
   numberOfExercises: number;
   timeAllocated: number;
@@ -24,10 +24,10 @@ export default function CreateTest({ onSuccess }: Props) {
   const [createdPin, setCreatedPin] = useState('');
 
   const addSection = () => {
-    const nextOrder = sections.length + 1;
+    const order = sections.length + 1;
     setSections(prev => [...prev, {
       subject: 'GRAMMAR', sectionType: 'EXERCISE',
-      variantGroups: ['1_5'], numberOfExercises: 3, timeAllocated: 20, sectionOrder: nextOrder,
+      variantGroups: ['1_5'], numberOfExercises: 3, timeAllocated: 20, sectionOrder: order,
     }]);
   };
 
@@ -35,17 +35,16 @@ export default function CreateTest({ onSuccess }: Props) {
     setSections(prev => prev.filter((_, i) => i !== idx).map((s, i) => ({ ...s, sectionOrder: i + 1 })));
   };
 
-  const updateSection = (idx: number, field: keyof SectionForm, value: unknown) => {
+  const update = <K extends keyof SectionForm>(idx: number, field: K, value: SectionForm[K]) => {
     setSections(prev => prev.map((s, i) => i === idx ? { ...s, [field]: value } : s));
   };
 
-  const toggleVariantGroup = (idx: number, group: string) => {
+  const toggleVariant = (idx: number, group: string) => {
     setSections(prev => prev.map((s, i) => {
       if (i !== idx) return s;
-      const groups = s.variantGroups.includes(group)
-        ? s.variantGroups.filter(g => g !== group)
-        : [...s.variantGroups, group];
-      return { ...s, variantGroups: groups.length > 0 ? groups : s.variantGroups };
+      const has = s.variantGroups.includes(group);
+      if (has && s.variantGroups.length === 1) return s; // at least one
+      return { ...s, variantGroups: has ? s.variantGroups.filter(g => g !== group) : [...s.variantGroups, group] };
     }));
   };
 
@@ -65,29 +64,26 @@ export default function CreateTest({ onSuccess }: Props) {
       setCreatedPin(res.data.data.pinCode);
     } catch (err: unknown) {
       const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
-      setError(msg || "Test yaratishda xatolik");
+      setError(msg || 'Test yaratishda xatolik');
     } finally {
       setLoading(false);
     }
   };
 
-  // ── Success screen ──────────────────────────────────────────────────────────
+  // ── PIN screen ─────────────────────────────────────────────────────────────
   if (createdPin) {
     return (
-      <div className="flex flex-col items-center gap-6 py-6 text-center">
-        <div className="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-900/20 flex items-center justify-center">
-          <svg className="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
+      <div className="py-4 text-center space-y-6">
+        <div className="space-y-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400">Test muvaffaqiyatli yaratildi. PIN kodni o'quvchilarga yuboring:</p>
         </div>
-        <div>
-          <p className="text-lg font-bold text-gray-900 dark:text-white">Test yaratildi</p>
-          <p className="text-sm text-gray-400 mt-0.5">PIN kodni o'quvchilarga ulashing</p>
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-2xl py-8">
+          <p className="text-6xl font-mono font-black tracking-[0.2em] text-gray-900 dark:text-white">{createdPin}</p>
         </div>
-        <div className="w-full bg-gray-50 dark:bg-gray-800 rounded-2xl py-6 border border-gray-100 dark:border-gray-700">
-          <p className="text-5xl font-mono font-black tracking-[0.25em] text-gray-900 dark:text-white">{createdPin}</p>
-        </div>
-        <button onClick={onSuccess} className="w-full py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-semibold text-sm hover:opacity-90 transition-opacity">
+        <button
+          onClick={onSuccess}
+          className="w-full py-3 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold text-sm hover:opacity-90 transition-opacity"
+        >
           Tayyor
         </button>
       </div>
@@ -96,48 +92,46 @@ export default function CreateTest({ onSuccess }: Props) {
 
   // ── Form ───────────────────────────────────────────────────────────────────
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-6">
 
       {/* Error */}
       {error && (
-        <div className="flex items-center gap-2.5 bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-800/30 text-red-600 dark:text-red-400 px-3.5 py-2.5 rounded-xl text-sm">
-          <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
+        <p className="text-sm text-red-500 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/40 px-4 py-3 rounded-xl">
           {error}
-        </div>
+        </p>
       )}
 
-      {/* Row 1: Title + Max attempts */}
-      <div className="flex gap-3">
-        <div className="flex-1">
-          <label className="block text-xs font-semibold text-gray-400 dark:text-gray-500 mb-1.5 uppercase tracking-wide">Test nomi</label>
+      {/* Test nomi + urinish */}
+      <div className="flex gap-3 items-end">
+        <div className="flex-1 space-y-1.5">
+          <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Test nomi</label>
           <input
             value={title}
             onChange={e => setTitle(e.target.value)}
-            placeholder="Vocabulary — Unit 1–5"
+            placeholder="Masalan: Grammar — Unit 1–5"
             required
-            className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-gray-600 outline-none focus:border-blue-400 dark:focus:border-blue-500 focus:ring-0 transition"
+            className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm text-gray-900 dark:text-white placeholder-gray-300 dark:placeholder-gray-600 outline-none focus:border-blue-400 dark:focus:border-blue-500 transition"
           />
         </div>
-        <div className="w-24 flex-shrink-0">
-          <label className="block text-xs font-semibold text-gray-400 dark:text-gray-500 mb-1.5 uppercase tracking-wide">Urinish</label>
+        <div className="space-y-1.5">
+          <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Urinish</label>
           <input
-            type="number" min={1} max={100} value={maxAttempts}
+            type="number" min={1} max={10} value={maxAttempts}
             onChange={e => setMaxAttempts(parseInt(e.target.value) || 1)}
-            className="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm font-bold text-gray-900 dark:text-white outline-none focus:border-blue-400 dark:focus:border-blue-500 transition text-center"
+            className="w-20 px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-bold text-center text-gray-900 dark:text-white outline-none focus:border-blue-400 dark:focus:border-blue-500 transition"
           />
         </div>
       </div>
 
-      {/* Sections */}
-      <div className="space-y-2">
+      {/* Bo'limlar */}
+      <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <label className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">
-            Bo'limlar
-          </label>
-          <button type="button" onClick={addSection}
-            className="text-xs font-semibold text-blue-500 hover:text-blue-600 transition-colors flex items-center gap-1">
+          <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Bo'limlar</label>
+          <button
+            type="button"
+            onClick={addSection}
+            className="text-xs font-semibold text-blue-500 hover:text-blue-600 transition-colors flex items-center gap-1"
+          >
             <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
             </svg>
@@ -146,16 +140,108 @@ export default function CreateTest({ onSuccess }: Props) {
         </div>
 
         {sections.map((sec, idx) => (
-          <SectionCard
-            key={idx}
-            section={sec}
-            idx={idx}
-            canRemove={sections.length > 1}
-            onRemove={() => removeSection(idx)}
-            onUpdate={(field, value) => updateSection(idx, field, value)}
-            onToggleVariant={group => toggleVariantGroup(idx, group)}
-            onSelectAll={() => setSections(prev => prev.map((s, i) => i === idx ? { ...s, variantGroups: [...VARIANT_GROUPS] } : s))}
-          />
+          <div key={idx} className="border border-gray-200 dark:border-gray-700 rounded-2xl overflow-hidden">
+
+            {/* Section header row */}
+            <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-gray-800/50">
+              <span className="text-xs font-black text-gray-400 dark:text-gray-500 w-5 text-center">{idx + 1}</span>
+
+              {/* Subject */}
+              <select
+                value={sec.subject}
+                onChange={e => update(idx, 'subject', e.target.value as 'GRAMMAR' | 'VOCABULARY')}
+                className="text-sm font-semibold text-gray-900 dark:text-white bg-transparent border-none outline-none cursor-pointer"
+              >
+                <option value="GRAMMAR">Grammar</option>
+                <option value="VOCABULARY">Vocabulary</option>
+              </select>
+
+              {/* Type toggle */}
+              <div className="flex rounded-lg bg-gray-200 dark:bg-gray-700 p-0.5 ml-1">
+                {(['EXERCISE', 'PRACTICE_TEST'] as const).map(t => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => update(idx, 'sectionType', t)}
+                    className={`px-2.5 py-1 rounded-md text-xs font-bold transition-all ${
+                      sec.sectionType === t
+                        ? 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white shadow-sm'
+                        : 'text-gray-500 dark:text-gray-400'
+                    }`}
+                  >
+                    {t === 'EXERCISE' ? 'Mashq' : 'Practice'}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex-1" />
+
+              {/* Count */}
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs text-gray-400 dark:text-gray-500">Savol:</span>
+                <input
+                  type="number" min={1} max={200}
+                  value={sec.numberOfExercises}
+                  onChange={e => update(idx, 'numberOfExercises', parseInt(e.target.value) || 1)}
+                  className="w-12 text-center text-sm font-bold text-gray-900 dark:text-white bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg py-1 outline-none focus:border-blue-400 dark:focus:border-blue-500 transition"
+                />
+              </div>
+
+              {/* Time */}
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs text-gray-400 dark:text-gray-500">Vaqt:</span>
+                <input
+                  type="number" min={1} max={180}
+                  value={sec.timeAllocated}
+                  onChange={e => update(idx, 'timeAllocated', parseInt(e.target.value) || 1)}
+                  className="w-12 text-center text-sm font-bold text-gray-900 dark:text-white bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg py-1 outline-none focus:border-blue-400 dark:focus:border-blue-500 transition"
+                />
+                <span className="text-xs text-gray-400 dark:text-gray-500">min</span>
+              </div>
+
+              {/* Delete */}
+              {sections.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeSection(idx)}
+                  className="text-gray-300 dark:text-gray-600 hover:text-red-400 dark:hover:text-red-400 transition-colors ml-1"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              )}
+            </div>
+
+            {/* Variants row */}
+            <div className="px-4 py-3 flex items-center gap-2 flex-wrap bg-white dark:bg-gray-900">
+              <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">Variantlar:</span>
+              {VARIANT_GROUPS.map(group => {
+                const on = sec.variantGroups.includes(group);
+                return (
+                  <button
+                    key={group}
+                    type="button"
+                    onClick={() => toggleVariant(idx, group)}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold border transition-all ${
+                      on
+                        ? 'bg-blue-500 border-blue-500 text-white'
+                        : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 hover:border-gray-300'
+                    }`}
+                  >
+                    {VARIANT_GROUP_LABELS[group as VariantGroup]}
+                  </button>
+                );
+              })}
+              <button
+                type="button"
+                onClick={() => update(idx, 'variantGroups', [...VARIANT_GROUPS])}
+                className="text-xs text-blue-400 hover:text-blue-500 font-semibold transition-colors ml-1"
+              >
+                Barchasi
+              </button>
+            </div>
+          </div>
         ))}
       </div>
 
@@ -163,148 +249,18 @@ export default function CreateTest({ onSuccess }: Props) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full py-3 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-semibold text-sm hover:opacity-90 disabled:opacity-40 transition-opacity flex items-center justify-center gap-2"
+        className="w-full py-3 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold text-sm hover:opacity-90 disabled:opacity-40 transition-opacity flex items-center justify-center gap-2"
       >
         {loading ? (
-          <><svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-          </svg>Yaratilmoqda...</>
+          <>
+            <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+            </svg>
+            Yaratilmoqda...
+          </>
         ) : 'Test yaratish va PIN olish'}
       </button>
     </form>
-  );
-}
-
-// ── Section Card ──────────────────────────────────────────────────────────────
-
-interface SectionCardProps {
-  section: SectionForm;
-  idx: number;
-  canRemove: boolean;
-  onRemove: () => void;
-  onUpdate: (field: keyof SectionForm, value: unknown) => void;
-  onToggleVariant: (group: string) => void;
-  onSelectAll: () => void;
-}
-
-function SectionCard({ section, idx, canRemove, onRemove, onUpdate, onToggleVariant, onSelectAll }: SectionCardProps) {
-  const isExercise = section.sectionType === 'EXERCISE';
-  const isVocab = section.subject === 'VOCABULARY';
-
-  const inputCls = "w-full px-3 py-2 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm text-gray-900 dark:text-white outline-none focus:border-blue-400 dark:focus:border-blue-500 transition";
-
-  return (
-    <div className="rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
-
-      {/* Card header */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-gray-50 dark:bg-gray-800/60 border-b border-gray-100 dark:border-gray-800">
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-black text-gray-300 dark:text-gray-600 tabular-nums">
-            {String(idx + 1).padStart(2, '0')}
-          </span>
-          <div className="flex items-center gap-1.5">
-            <span className={`w-1.5 h-1.5 rounded-full ${isVocab ? 'bg-blue-400' : 'bg-indigo-400'}`} />
-            <span className="text-xs font-bold text-gray-600 dark:text-gray-400">
-              {isVocab ? 'Vocabulary' : 'Grammar'} · {isExercise ? 'Mashq' : 'Practice Test'}
-            </span>
-          </div>
-        </div>
-        {canRemove && (
-          <button type="button" onClick={onRemove}
-            className="text-gray-300 dark:text-gray-600 hover:text-red-400 transition-colors">
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        )}
-      </div>
-
-      <div className="p-4 bg-white dark:bg-gray-900 space-y-4">
-
-        {/* Type toggle */}
-        <div className="grid grid-cols-2 gap-1.5 p-1 bg-gray-50 dark:bg-gray-800 rounded-xl">
-          {([['EXERCISE', 'Mashq'], ['PRACTICE_TEST', 'Practice Test']] as const).map(([val, label]) => (
-            <button
-              key={val}
-              type="button"
-              onClick={() => onUpdate('sectionType', val)}
-              className={`py-2 rounded-lg text-xs font-bold transition-all ${
-                section.sectionType === val
-                  ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm'
-                  : 'text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        {/* Subject / Count / Time */}
-        <div className="grid grid-cols-3 gap-2">
-          <div>
-            <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">Fan</p>
-            <select
-              value={section.subject}
-              onChange={e => onUpdate('subject', e.target.value)}
-              className={inputCls}
-            >
-              <option value="GRAMMAR">Grammar</option>
-              <option value="VOCABULARY">Vocabulary</option>
-            </select>
-          </div>
-          <div>
-            <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">
-              {isExercise ? 'Mashqlar' : 'Savollar'}
-            </p>
-            <input
-              type="number" min={1} max={200}
-              value={section.numberOfExercises}
-              onChange={e => onUpdate('numberOfExercises', parseInt(e.target.value) || 1)}
-              className={`${inputCls} text-center font-bold`}
-            />
-          </div>
-          <div>
-            <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">Vaqt (min)</p>
-            <input
-              type="number" min={1} max={180}
-              value={section.timeAllocated}
-              onChange={e => onUpdate('timeAllocated', parseInt(e.target.value) || 1)}
-              className={`${inputCls} text-center font-bold`}
-            />
-          </div>
-        </div>
-
-        {/* Variant groups */}
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wide">Variantlar</p>
-            <button type="button" onClick={onSelectAll}
-              className="text-[10px] font-bold text-blue-400 hover:text-blue-500 uppercase tracking-wide transition-colors">
-              Barchasi
-            </button>
-          </div>
-          <div className="flex gap-1.5 flex-wrap">
-            {VARIANT_GROUPS.map(group => {
-              const selected = section.variantGroups.includes(group);
-              return (
-                <button
-                  key={group}
-                  type="button"
-                  onClick={() => onToggleVariant(group)}
-                  className={`px-2.5 py-1.5 rounded-lg text-[11px] font-bold border transition-all ${
-                    selected
-                      ? 'bg-blue-500 border-blue-500 text-white'
-                      : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 hover:border-gray-300 dark:hover:border-gray-600'
-                  }`}
-                >
-                  {VARIANT_GROUP_LABELS[group as VariantGroup]}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }

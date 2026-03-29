@@ -6,6 +6,7 @@ import { useAntiCheat } from '../../hooks/useAntiCheat';
 import { studentApi } from '../../services/api';
 import { connectSocket } from '../../services/socketClient';
 import Timer from '../Common/Timer';
+import Logo from '../Common/Logo';
 import ExerciseRenderer from './ExerciseRenderer';
 import PracticeTestRenderer from './PracticeTestRenderer';
 import { ClientExercise, ClientPracticeQuestion, SubmitAnswer } from '../../types';
@@ -160,9 +161,7 @@ export default function TestTaking() {
 
           {/* Logo */}
           <div className="flex items-center">
-            <div className="rounded-lg dark:bg-white dark:px-2 dark:py-1 transition-colors">
-              <img src="/logo.png" alt="IELTS Imperia" className="h-7 w-auto object-contain" />
-            </div>
+            <Logo className="h-7" wrapDark />
           </div>
 
           {/* Status badge */}
