@@ -5,8 +5,9 @@ import Loading from '../Common/Loading';
 
 interface Section {
     id: string;
-    sectionType: string;
-    numberOfQuestions: number;
+    subject: string;        // GRAMMAR | VOCABULARY
+    sectionType: string;    // EXERCISE | PRACTICE_TEST
+    numberOfExercises: number;
     timeAllocated: number;
     sectionOrder: number;
 }
@@ -159,17 +160,23 @@ export default function TestDetail() {
                     {test.sections.map(s => (
                         <div key={s.id} className="px-5 py-4 flex items-center justify-between gap-4">
                             <div className="flex items-center gap-3">
-                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold ${s.sectionType === 'VOCABULARY'
-                                        ? 'bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
-                                        : 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400'
+                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold ${
+                                        s.subject === 'VOCABULARY'
+                                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+                                        : 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'
                                     }`}>
                                     {s.sectionOrder}
                                 </div>
                                 <div>
                                     <p className="font-semibold text-gray-900 dark:text-white text-sm">
-                                        {s.sectionType === 'VOCABULARY' ? 'Vocabulary' : 'Grammar'}
+                                        {s.subject === 'VOCABULARY' ? 'Vocabulary' : 'Grammar'}
+                                        {s.sectionType === 'PRACTICE_TEST' && (
+                                            <span className="ml-1.5 text-[10px] font-bold bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 px-1.5 py-0.5 rounded uppercase tracking-wide">
+                                                Practice Test
+                                            </span>
+                                        )}
                                     </p>
-                                    <p className="text-xs text-gray-400 dark:text-gray-500">{s.numberOfQuestions} ta savol</p>
+                                    <p className="text-xs text-gray-400 dark:text-gray-500">{s.numberOfExercises} ta savol</p>
                                 </div>
                             </div>
                             <div className="text-right">
