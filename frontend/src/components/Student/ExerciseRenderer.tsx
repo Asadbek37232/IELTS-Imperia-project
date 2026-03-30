@@ -65,58 +65,49 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer, isFlagge
   const subjectLabel = exercise.subject.toUpperCase();
 
   // ── Render passage (left panel) ─────────────────────────────────────────────
+  const hasInlineMarkers = exercise.passage ? /\[\d+\]/.test(exercise.passage) : false;
+
   const renderPassage = () => {
     if (!exercise.passage) return null;
 
-    if (exercise.type === 'gap_fill') {
-      // For gap_fill, we need to render inline inputs at [N] markers.
-      // Also handle dialogue formatting within text chunks.
-      const parts: React.ReactNode[] = [];
-      let text = exercise.passage;
-      let lastIndex = 0;
-      let partKey = 0;
+    const text = exercise.passage;
 
+    // gap_fill with [N] markers → embed inputs inline in passage
+    if (exercise.type === 'gap_fill' && hasInlineMarkers) {
       const dialogLines = parseDialogue(text.replace(/\[\d+\]/g, '___'));
-
-      // If it's a dialogue, render as structured speaker turns with embedded inputs
       if (dialogLines) {
         return <DialoguePassageWithInputs passage={text} questions={exercise.questions} getAnswer={getAnswer} recordAnswer={recordAnswer} />;
       }
 
-      // Normal gap_fill passage
+      // Normal inline gap_fill
+      const parts: React.ReactNode[] = [];
+      let lastIndex = 0;
+      let partKey = 0;
+
       exercise.questions.forEach(q => {
         const marker = `[${q.id}]`;
         const idx = text.indexOf(marker, lastIndex);
         if (idx === -1) return;
-
         if (idx > lastIndex) {
-          parts.push(
-            <span key={`t-${partKey++}`} className="font-serif">
-              {text.slice(lastIndex, idx)}
-            </span>
-          );
+          parts.push(<span key={`t-${partKey++}`} className="font-serif">{text.slice(lastIndex, idx)}</span>);
         }
-
         const val = getAnswer(q.id);
         parts.push(
-          <span key={`inp-${q.id}`} className="inline-flex items-baseline gap-0.5 mx-0.5">
+          <span key={`inp-${q.id}`} className="inline-flex items-baseline mx-0.5">
             <input
               type="text"
               value={val}
               onChange={e => recordAnswer(q, e.target.value)}
-              className={`border-b-2 bg-transparent font-serif px-1 w-64 text-[15px] focus:outline-none transition-all
-                ${val ? 'border-orange-400 text-gray-900 dark:text-gray-100' : 'border-gray-300 dark:border-gray-600 text-gray-400'}
+              className={`border-b-2 bg-transparent font-serif px-1 w-52 text-[15px] focus:outline-none transition-all
+                ${val ? 'border-orange-400 text-gray-900 dark:text-gray-100' : 'border-gray-300 dark:border-gray-600'}
                 focus:border-orange-500`}
-              placeholder=""
+              placeholder=" "
             />
           </span>
         );
-
         lastIndex = idx + marker.length;
       });
-
       parts.push(<span key="end" className="font-serif">{text.slice(lastIndex)}</span>);
-
       return (
         <div className="font-serif text-gray-800 dark:text-gray-200 leading-[1.9] text-[16px]">
           {parts}
@@ -124,8 +115,9 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer, isFlagge
       );
     }
 
-    // Default passage rendering — check for dialogue
-    const dialogLines = parseDialogue(exercise.passage);
+    // No [N] markers (or non-gap_fill) — render as reference text only
+    // Check for dialogue format
+    const dialogLines = parseDialogue(text);
     if (dialogLines) {
       return (
         <div className="space-y-3">
@@ -145,7 +137,7 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer, isFlagge
 
     return (
       <div className="font-serif text-gray-800 dark:text-gray-200 leading-relaxed text-[16px] whitespace-pre-wrap">
-        {exercise.passage}
+        {text}
       </div>
     );
   };
@@ -179,10 +171,10 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer, isFlagge
                               type="text"
                               value={val}
                               onChange={e => recordAnswer(q, e.target.value)}
-                              className={`border-b-2 bg-transparent font-serif px-1 mx-1 w-48 text-center text-[16px] focus:outline-none transition-all py-0.5 inline-block
-                                ${val ? 'border-orange-400 text-gray-900 dark:text-gray-100 font-medium' : 'border-gray-300 dark:border-gray-600 text-gray-400'}
+                              className={`border-b-2 bg-transparent font-serif px-2 mx-1 text-[16px] focus:outline-none transition-all py-0.5 inline-block
+                                ${val ? 'border-orange-400 text-gray-900 dark:text-gray-100 font-medium w-56' : 'border-gray-300 dark:border-gray-600 w-48'}
                                 focus:border-orange-500`}
-                              placeholder="..."
+                              placeholder=" "
                             />
                           )}
                         </span>
@@ -471,6 +463,11 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer, isFlagge
                 <div>
                   <p className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] mb-1.5">
                     {subjectLabel} · {exercise.type.replace('_', ' ').toUpperCase()}
+                    {exercise.type === 'gap_fill' && !hasInlineMarkers && (
+                      <span className="ml-2 text-[11px] normal-case font-semibold bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 px-1.5 py-0.5 rounded">
+                        o'qing
+                      </span>
+                    )}
                   </p>
                   <h2 className="text-xl font-serif font-bold text-gray-900 dark:text-white">
                     {exercise.title}
