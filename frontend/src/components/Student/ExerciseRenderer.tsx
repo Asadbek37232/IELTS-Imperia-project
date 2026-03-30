@@ -250,9 +250,9 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer, isFlagge
         hasHints = true;
         if (hm.index > li) passageParts.push(<span key={`t${li}`}>{text.slice(li, hm.index)}</span>);
         passageParts.push(
-          <span key={`h${hm.index}`} className="inline-flex items-center gap-1 mx-1 px-2 py-0.5 rounded-full bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-700 text-orange-600 dark:text-orange-400 text-[13px] font-semibold whitespace-nowrap align-middle">
-            <span className="text-[10px] font-black text-orange-400 dark:text-orange-500 leading-none">{hm[1]}</span>
-            <span>{hm[2]}</span>
+          <span key={`h${hm.index}`} className="inline-flex items-center gap-1 mx-0.5 align-middle whitespace-nowrap">
+            <span className="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-[11px] font-bold text-gray-500 dark:text-gray-400 leading-none">{hm[1]}</span>
+            <span className="text-[13px] text-gray-400 dark:text-gray-500 italic">{hm[2]}</span>
           </span>
         );
         li = hm.index + hm[0].length;
