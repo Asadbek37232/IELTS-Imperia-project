@@ -7,6 +7,7 @@ import { studentApi } from '../../services/api';
 import { connectSocket } from '../../services/socketClient';
 import Timer from '../Common/Timer';
 import Logo from '../Common/Logo';
+import SectionTransitionModal from './SectionTransitionModal';
 import ExerciseRenderer from './ExerciseRenderer';
 import PracticeTestRenderer from './PracticeTestRenderer';
 import { ClientExercise, ClientPracticeQuestion, SubmitAnswer } from '../../types';
@@ -18,6 +19,7 @@ export default function TestTaking() {
   const [restoring, setRestoring] = useState(false);
   const [currentExerciseIdx, setCurrentExerciseIdx] = useState(0);
   const [flaggedExercises, setFlaggedExercises] = useState<Set<number>>(new Set());
+  const [pendingSection, setPendingSection] = useState<import('../../types').CurrentSection | null>(null);
 
   // Settings Modal State
   const [showSettings, setShowSettings] = useState(false);
@@ -88,7 +90,13 @@ export default function TestTaking() {
       const hasNext = sections.some(s => s.sectionOrder === ord + 1);
       if (hasNext) {
         const res = await studentApi.advanceSection(testSessionId, getAllAnswers());
-        goToNextSection(res.data.data);
+        const nextData = res.data.data;
+        // Attach timeAllocated from sections config for the modal
+        const nextConfig = sections.find(s => s.sectionOrder === nextData?.sectionOrder);
+        if (nextData && nextConfig) nextData.timeAllocated = nextConfig.timeAllocated;
+        // Show break modal instead of jumping directly
+        setPendingSection(nextData);
+        return;
       } else {
         const res = await studentApi.submitTest(testSessionId, getAllAnswers());
         // Test fully complete — clear session restore data
@@ -124,6 +132,13 @@ export default function TestTaking() {
     }, 10000);
     return () => clearInterval(interval);
   }, [testSessionId, getAllAnswers, phase]);
+
+  // ── Start the pending section (after break) ────────────────────────────────
+  const handleStartPendingSection = useCallback(() => {
+    if (!pendingSection) return;
+    goToNextSection(pendingSection);
+    setPendingSection(null);
+  }, [pendingSection, goToNextSection]);
 
   // ── Spinner while restoring ─────────────────────────────────────────────────
   if (restoring) {
@@ -314,6 +329,16 @@ export default function TestTaking() {
           </>
         )}
       </div>
+      )}
+
+      {/* Section Transition Modal */}
+      {pendingSection && (
+        <SectionTransitionModal
+          section={pendingSection}
+          sectionNumber={pendingSection.sectionOrder}
+          totalSections={sections.length}
+          onStart={handleStartPendingSection}
+        />
       )}
 
       {/* Settings Modal */}

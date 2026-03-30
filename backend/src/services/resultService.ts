@@ -83,18 +83,34 @@ export async function submitTest(studentId: string, testSessionId: string, answe
         if (ex) {
           for (const q of ex.questions) {
             const anyQ = q as Record<string, unknown>;
-            let exactAnswer = '';
-            if (Array.isArray(anyQ.answers) && anyQ.answers.length > 0) {
-              exactAnswer = (anyQ.answers as string[]).join('|||');
+            const blankCount = (q.text || '').split('___').length - 1;
+
+            if (blankCount > 1 && Array.isArray(anyQ.answers) && (anyQ.answers as string[]).length > 1) {
+              // Multi-blank: each blank is a separate graded question
+              for (let b = 0; b < blankCount; b++) {
+                const blankAnswer = (anyQ.answers as string[])[b] || '';
+                requiredQuestions.push({
+                  questionId: `${ex.id}_${q.id}_b${b}`,
+                  questionType: sec.subject as 'VOCABULARY' | 'GRAMMAR',
+                  questionText: q.text || '',
+                  exactAnswer: blankAnswer,
+                });
+              }
             } else {
-              exactAnswer = q.answer || '';
+              // Single blank or alternative answers
+              let exactAnswer = '';
+              if (Array.isArray(anyQ.answers) && (anyQ.answers as string[]).length > 0) {
+                exactAnswer = (anyQ.answers as string[]).join('|||');
+              } else {
+                exactAnswer = q.answer || '';
+              }
+              requiredQuestions.push({
+                questionId: `${ex.id}_${q.id}`,
+                questionType: sec.subject as 'VOCABULARY' | 'GRAMMAR',
+                questionText: q.text || '',
+                exactAnswer,
+              });
             }
-            requiredQuestions.push({
-              questionId: `${ex.id}_${q.id}`,
-              questionType: sec.subject as 'VOCABULARY' | 'GRAMMAR',
-              questionText: q.text || '',
-              exactAnswer,
-            });
           }
         }
       }

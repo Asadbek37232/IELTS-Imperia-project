@@ -107,6 +107,7 @@ export interface CurrentSection {
   sectionType: SectionType;
   sectionOrder: number;
   deadline: string;
+  timeAllocated?: number;
   exercises?: ClientExercise[];           // EXERCISE sections
   questions?: ClientPracticeQuestion[];   // PRACTICE_TEST sections
   answers?: SubmitAnswer[];

@@ -152,9 +152,26 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer, isFlagge
           <div className="space-y-6">
             <InstructionBox text={exercise.instruction} />
             {exercise.questions.map(q => {
-              const val = getAnswer(q.id);
               const cleanText = q.text.replace(new RegExp(`^${q.id}\\.\\s*`), '');
               const parts = cleanText.split('___');
+              const blankCount = parts.length - 1;
+              // multi-blank: _b0, _b1, ... | single: original key
+              const getBlank = (b: number) =>
+                blankCount > 1
+                  ? answers[`${exercise.id}_${q.id}_b${b}`]?.selectedAnswer || ''
+                  : getAnswer(q.id);
+              const recordBlank = (b: number, value: string) => {
+                if (blankCount > 1) {
+                  onAnswer({
+                    questionId: `${exercise.id}_${q.id}_b${b}`,
+                    questionType: exercise.subject.toUpperCase() as 'GRAMMAR' | 'VOCABULARY',
+                    selectedAnswer: value,
+                    questionText: q.text,
+                  });
+                } else {
+                  recordAnswer(q, value);
+                }
+              };
 
               return (
                 <div key={q.id} className="flex items-start gap-3">
@@ -162,32 +179,36 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer, isFlagge
                     {q.id}.
                   </span>
                   <div className="flex-1">
-                    <p className="text-[16px] font-serif text-gray-800 dark:text-gray-200 leading-relaxed inline">
-                      {parts.map((part, i) => (
-                        <span key={i}>
-                          {part}
-                          {i < parts.length - 1 && (
-                            <input
-                              type="text"
-                              value={val}
-                              onChange={e => recordAnswer(q, e.target.value)}
-                              className={`border-b-2 bg-transparent font-serif px-2 mx-1 text-[16px] focus:outline-none transition-all py-0.5 inline-block
-                                ${val ? 'border-orange-400 text-gray-900 dark:text-gray-100 font-medium w-56' : 'border-gray-300 dark:border-gray-600 w-48'}
-                                focus:border-orange-500`}
-                              placeholder=" "
-                            />
-                          )}
-                        </span>
-                      ))}
-                    </p>
-                    {parts.length === 1 && (
+                    {blankCount >= 1 ? (
+                      <p className="text-[16px] font-serif text-gray-800 dark:text-gray-200 leading-relaxed inline">
+                        {parts.map((part, i) => {
+                          const val = i > 0 ? getBlank(i - 1) : '';
+                          return (
+                            <span key={i}>
+                              {i > 0 && (
+                                <input
+                                  type="text"
+                                  value={val}
+                                  onChange={e => recordBlank(i - 1, e.target.value)}
+                                  className={`border-b-2 bg-transparent font-serif px-2 mx-1 text-[16px] focus:outline-none transition-all py-0.5 inline-block
+                                    ${val ? 'border-orange-400 text-gray-900 dark:text-gray-100 font-medium w-52' : 'border-gray-300 dark:border-gray-600 w-44'}
+                                    focus:border-orange-500`}
+                                  placeholder=" "
+                                />
+                              )}
+                              {part}
+                            </span>
+                          );
+                        })}
+                      </p>
+                    ) : (
                       <div className="mt-2">
                         <input
                           type="text"
-                          value={val}
+                          value={getAnswer(q.id)}
                           onChange={e => recordAnswer(q, e.target.value)}
                           className={`border-b-2 bg-transparent font-serif px-1 w-full text-[16px] focus:outline-none transition-all py-0.5
-                            ${val ? 'border-orange-400 text-gray-900 dark:text-gray-100' : 'border-gray-300 dark:border-gray-600'}
+                            ${getAnswer(q.id) ? 'border-orange-400 text-gray-900 dark:text-gray-100' : 'border-gray-300 dark:border-gray-600'}
                             focus:border-orange-500`}
                           placeholder="Your answer..."
                         />

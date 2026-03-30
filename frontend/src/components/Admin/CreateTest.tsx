@@ -116,8 +116,14 @@ export default function CreateTest({ onSuccess }: Props) {
         <div className="space-y-1.5">
           <label className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Urinish</label>
           <input
-            type="number" min={1} max={10} value={maxAttempts}
-            onChange={e => setMaxAttempts(parseInt(e.target.value) || 1)}
+            type="text"
+            inputMode="numeric"
+            value={maxAttempts === 0 ? '' : maxAttempts}
+            onChange={e => {
+              const v = e.target.value.replace(/\D/g, '');
+              setMaxAttempts(v === '' ? 0 : Math.min(10, parseInt(v)));
+            }}
+            onBlur={e => { if (!e.target.value) setMaxAttempts(1); }}
             className="w-20 px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-bold text-center text-gray-900 dark:text-white outline-none focus:border-blue-400 dark:focus:border-blue-500 transition"
           />
         </div>
@@ -178,11 +184,18 @@ export default function CreateTest({ onSuccess }: Props) {
 
               {/* Count */}
               <div className="flex items-center gap-1.5">
-                <span className="text-xs text-gray-400 dark:text-gray-500">Savol:</span>
+                <span className="text-xs text-gray-400 dark:text-gray-500">
+                  {sec.sectionType === 'PRACTICE_TEST' ? 'Savol:' : 'Mashq:'}
+                </span>
                 <input
-                  type="number" min={1} max={200}
-                  value={sec.numberOfExercises}
-                  onChange={e => update(idx, 'numberOfExercises', parseInt(e.target.value) || 1)}
+                  type="text"
+                  inputMode="numeric"
+                  value={sec.numberOfExercises === 0 ? '' : sec.numberOfExercises}
+                  onChange={e => {
+                    const v = e.target.value.replace(/\D/g, '');
+                    update(idx, 'numberOfExercises', v === '' ? 0 : Math.min(200, parseInt(v)));
+                  }}
+                  onBlur={e => { if (!e.target.value) update(idx, 'numberOfExercises', 1); }}
                   className="w-12 text-center text-sm font-bold text-gray-900 dark:text-white bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg py-1 outline-none focus:border-blue-400 dark:focus:border-blue-500 transition"
                 />
               </div>
@@ -191,9 +204,14 @@ export default function CreateTest({ onSuccess }: Props) {
               <div className="flex items-center gap-1.5">
                 <span className="text-xs text-gray-400 dark:text-gray-500">Vaqt:</span>
                 <input
-                  type="number" min={1} max={180}
-                  value={sec.timeAllocated}
-                  onChange={e => update(idx, 'timeAllocated', parseInt(e.target.value) || 1)}
+                  type="text"
+                  inputMode="numeric"
+                  value={sec.timeAllocated === 0 ? '' : sec.timeAllocated}
+                  onChange={e => {
+                    const v = e.target.value.replace(/\D/g, '');
+                    update(idx, 'timeAllocated', v === '' ? 0 : Math.min(180, parseInt(v)));
+                  }}
+                  onBlur={e => { if (!e.target.value) update(idx, 'timeAllocated', 1); }}
                   className="w-12 text-center text-sm font-bold text-gray-900 dark:text-white bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg py-1 outline-none focus:border-blue-400 dark:focus:border-blue-500 transition"
                 />
                 <span className="text-xs text-gray-400 dark:text-gray-500">min</span>
