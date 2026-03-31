@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { adminApi } from '../../services/api';
 import Loading from '../Common/Loading';
+import { exportToExcel, exportToPdf, exportToWord } from '../../utils/exportTestResults';
 
 interface Section {
     id: string;
@@ -58,6 +59,30 @@ export default function TestDetail() {
     const [test, setTest] = useState<TestDetail | null>(null);
     const [loading, setLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
+    const [showExport, setShowExport] = useState(false);
+    const [exporting, setExporting] = useState<string | null>(null);
+
+    const handleExport = async (format: 'excel' | 'pdf' | 'word') => {
+        if (!test) return;
+        setExporting(format);
+        try {
+            const exportData = {
+                title: test.title,
+                pinCode: test.pinCode,
+                createdAt: test.createdAt,
+                sections: test.sections,
+                results: test.results,
+            };
+            if (format === 'excel') await exportToExcel(exportData);
+            else if (format === 'pdf') exportToPdf(exportData);
+            else await exportToWord(exportData);
+        } catch (e) {
+            console.error('Export error:', e);
+        } finally {
+            setExporting(null);
+            setShowExport(false);
+        }
+    };
 
     useEffect(() => {
         if (!id) return;
@@ -110,8 +135,8 @@ export default function TestDetail() {
                             {test.title}
                         </h1>
                         <span className={`flex-shrink-0 text-xs font-bold px-2.5 py-1 rounded-full ${test.isActive
-                                ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400'
-                                : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400'
+                            ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400'
+                            : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400'
                             }`}>
                             {test.isActive ? 'Faol' : 'Nofaol'}
                         </span>
@@ -120,6 +145,18 @@ export default function TestDetail() {
                         Yaratilgan: {new Date(test.createdAt).toLocaleDateString('uz-UZ')}
                     </p>
                 </div>
+                {/* Export button */}
+                {test.results.length > 0 && (
+                    <button
+                        onClick={() => setShowExport(true)}
+                        className="flex-shrink-0 flex items-center gap-2 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                    >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                        </svg>
+                        Yuklab olish
+                    </button>
+                )}
             </div>
 
             {/* Info Cards */}
@@ -160,10 +197,9 @@ export default function TestDetail() {
                     {test.sections.map(s => (
                         <div key={s.id} className="px-5 py-4 flex items-center justify-between gap-4">
                             <div className="flex items-center gap-3">
-                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold ${
-                                        s.subject === 'VOCABULARY'
-                                        ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
-                                        : 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'
+                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-bold ${s.subject === 'VOCABULARY'
+                                    ? 'bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+                                    : 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400'
                                     }`}>
                                     {s.sectionOrder}
                                 </div>
@@ -258,6 +294,82 @@ export default function TestDetail() {
                     </div>
                 )}
             </div>
+
+            {/* Export Modal */}
+            {showExport && test && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
+                    <div className="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-sm border border-gray-100 dark:border-gray-800 shadow-2xl overflow-hidden">
+                        <div className="px-6 py-5 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                            <div>
+                                <h3 className="font-bold text-gray-900 dark:text-white text-base">Natijalarni yuklab olish</h3>
+                                <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{test.results.length} ta o'quvchi natijalari</p>
+                            </div>
+                            <button onClick={() => setShowExport(false)} className="w-8 h-8 rounded-xl flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-lg">&times;</button>
+                        </div>
+                        <div className="p-4 space-y-2">
+                            {[
+                                {
+                                    key: 'excel' as const,
+                                    label: 'Microsoft Excel',
+                                    ext: '.xlsx',
+                                    desc: "Jadval ko'rinishida, formulalar bilan",
+                                    icon: (
+                                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM8.5 17l2-3-2-3H10l1.5 2.25L13 11h1.5l-2 3 2 3H13l-1.5-2.25L10 17H8.5z" />
+                                        </svg>
+                                    ),
+                                },
+                                {
+                                    key: 'pdf' as const,
+                                    label: 'PDF Hujjat',
+                                    ext: '.pdf',
+                                    desc: "Chop etish uchun tayyor format",
+                                    icon: (
+                                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM9 13h1v3H9v-3zm2.5 0h1c.55 0 1 .45 1 1v1c0 .55-.45 1-1 1H11.5v-3zm1 2v-1h-.5v1h.5zM14 13h2v.5h-1.5V14H16v.5h-1.5V16H14v-3z" />
+                                        </svg>
+                                    ),
+                                },
+                                {
+                                    key: 'word' as const,
+                                    label: 'Microsoft Word',
+                                    ext: '.docx',
+                                    desc: "Tahrirlash mумkin bo'lgan hujjat",
+                                    icon: (
+                                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM8 17l1.5-6 1.5 4 1.5-4L14 17h-1.2l-.8-3-.8 3H8z" />
+                                        </svg>
+                                    ),
+                                },
+                            ].map(({ key, label, ext, desc, icon }) => (
+                                <button
+                                    key={key}
+                                    onClick={() => handleExport(key)}
+                                    disabled={exporting !== null}
+                                    className="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl border border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-white dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-wait transition-all text-left group"
+                                >
+                                    <span className="w-10 h-10 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-colors flex-shrink-0 shadow-sm">
+                                        {exporting === key ? (
+                                            <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                                            </svg>
+                                        ) : icon}
+                                    </span>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-sm font-semibold text-gray-900 dark:text-white">{label}</p>
+                                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{desc}</p>
+                                    </div>
+                                    <span className="text-xs font-mono font-bold text-gray-300 dark:text-gray-600">{ext}</span>
+                                </button>
+                            ))}
+                        </div>
+                        <div className="px-6 py-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-800/30">
+                            <p className="text-[11px] text-gray-400 dark:text-gray-600 text-center">Barcha ma'lumotlar maxfiy. Foydalanishda ehtiyot bo'ling.</p>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
