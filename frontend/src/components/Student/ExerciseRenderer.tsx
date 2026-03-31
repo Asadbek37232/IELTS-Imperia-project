@@ -81,7 +81,39 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer, isFlagge
         if (dialogLines) {
           return <DialoguePassageWithInputs passage={text} questions={exercise.questions} getAnswer={getAnswer} recordAnswer={recordAnswer} />;
         }
-        // Plain passage gap_fill: fall through to badge rendering — inputs are in the right panel
+        // Plain passage gap_fill — replace [N] with inline input
+        const parts: React.ReactNode[] = [];
+        let lastIndex = 0;
+        let partKey = 0;
+
+        exercise.questions.forEach(q => {
+          const marker = `[${q.id}]`;
+          const idx = text.indexOf(marker, lastIndex);
+          if (idx === -1) return;
+          if (idx > lastIndex) {
+            parts.push(<span key={`t-${partKey++}`} className="font-serif">{text.slice(lastIndex, idx)}</span>);
+          }
+          const val = getAnswer(q.id);
+          parts.push(
+            <input
+              key={`inp-${q.id}`}
+              type="text"
+              value={val}
+              onChange={e => recordAnswer(q, e.target.value)}
+              className={`border-b-2 bg-transparent font-serif px-1 mx-0.5 w-48 text-[15px] focus:outline-none transition-colors inline-block align-baseline
+                ${val ? 'border-orange-500 text-gray-900 dark:text-gray-100' : 'border-gray-400 dark:border-gray-500 text-gray-800 dark:text-gray-200'}
+                focus:border-orange-500`}
+              placeholder=" "
+            />
+          );
+          lastIndex = idx + marker.length;
+        });
+        parts.push(<span key="end" className="font-serif">{text.slice(lastIndex)}</span>);
+        return (
+          <div className="font-serif text-gray-800 dark:text-gray-200 leading-[2.6] text-[16px]">
+            {parts}
+          </div>
+        );
       }
 
       // [N] markers → styled orange badge (no input here; right panel handles answers)
@@ -473,46 +505,25 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer, isFlagge
             <InstructionBox text={exercise.instruction} />
             {exercise.questions.map(q => {
               const val = getAnswer(q.id);
-              const errorWord = q.errorWord || '';
-
-              const parts = errorWord
-                ? q.text.split(errorWord).map((part, i, arr) => (
-                    <span key={i}>
-                      {part}
-                      {i < arr.length - 1 && (
-                        <span className="underline decoration-red-400 decoration-2 text-red-600 dark:text-red-400 font-bold mx-0.5">
-                          {errorWord}
-                        </span>
-                      )}
-                    </span>
-                  ))
-                : [<span key={0}>{q.text}</span>];
-
               return (
-                <div key={q.id} className="space-y-3 pb-4 border-b border-gray-100 dark:border-gray-800 last:border-0">
-                  <div className="flex items-start gap-3">
-                    <span className="text-sm font-bold text-gray-500 flex-shrink-0 mt-0.5 w-5">{q.id}.</span>
-                    <p className="text-[15px] font-serif text-gray-800 dark:text-gray-200 leading-relaxed flex-1">
-                      {parts}
-                    </p>
+                <div key={q.id} className="pb-4 border-b border-gray-100 dark:border-gray-800 last:border-0">
+                  <div className="flex gap-3">
+                    <span className="text-[13px] font-black text-orange-500 bg-orange-100 dark:bg-orange-900/40 px-2 py-1 rounded-full h-fit flex-shrink-0 mt-0.5">{q.id}</span>
+                    <div className="flex-1">
+                      <InlineErrorSentence q={q} val={val} onRecord={v => recordAnswer(q, v)} />
+                    </div>
                   </div>
-                  <div className="pl-8 flex flex-wrap items-center gap-3">
-                    <span className="text-xs text-gray-400 font-semibold uppercase tracking-wide">Correction:</span>
-                    <input
-                      type="text"
-                      value={val}
-                      onChange={e => recordAnswer(q, e.target.value)}
-                      className={`border-b-2 bg-transparent font-serif px-1 text-[15px] focus:outline-none transition-colors flex-1 min-w-[320px] py-1
-                        ${val ? 'border-emerald-500 text-gray-900 dark:text-gray-100' : 'border-gray-400 dark:border-gray-500 text-gray-800 dark:text-gray-200'}
-                        focus:border-emerald-500`}
-                      placeholder="Write the correct form..."
-                    />
+                  <div className="mt-2 pl-10">
                     <button
                       type="button"
                       onClick={() => recordAnswer(q, '✓')}
-                      className="px-3 py-1.5 text-xs font-bold bg-gray-100 dark:bg-gray-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 text-gray-600 dark:text-gray-400 hover:text-emerald-700 dark:hover:text-emerald-400 rounded-lg transition-colors border border-gray-200 dark:border-gray-700 whitespace-nowrap"
+                      className={`px-3 py-1 text-xs font-bold rounded-lg border transition-colors ${
+                        val === '✓'
+                          ? 'bg-emerald-100 dark:bg-emerald-900/30 border-emerald-400 text-emerald-700 dark:text-emerald-400'
+                          : 'bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-500 hover:border-emerald-400 hover:text-emerald-600'
+                      }`}
                     >
-                      Correct ✓
+                      {val === '✓' ? '✓ Correct' : 'No error ✓'}
                     </button>
                   </div>
                 </div>
@@ -586,100 +597,167 @@ export default function ExerciseRenderer({ exercise, answers, onAnswer, isFlagge
   const hasPassage = !!exercise.passage;
   const hasImage = !!exercise.image;
   const hasLeftPanel = hasPassage || hasImage;
+  const isTwoPanel = exercise.type === 'mcq' && hasLeftPanel;
 
-  return (
-    <div className="flex-1 h-full overflow-hidden bg-white dark:bg-gray-900">
-      <div className="flex h-full overflow-hidden">
+  // For single-column gap_fill with passage: don't render separate questions (inputs are inline in passage)
+  const passageHandlesAnswers = !isTwoPanel && hasPassage &&
+    (exercise.type === 'gap_fill' || isDialogueWithBlanks);
 
-        {/* Left panel — passage or image */}
-        {hasLeftPanel && (
+  const headerBlock = (
+    <div className="flex items-start justify-between gap-3 mb-6">
+      <div>
+        <p className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] mb-1.5">
+          {subjectLabel} · {exercise.type.replace('_', ' ').toUpperCase()}
+        </p>
+        <h2 className="text-xl font-serif font-bold text-gray-900 dark:text-white">
+          {exercise.title}
+        </h2>
+      </div>
+      {onToggleFlag && (
+        <button
+          type="button"
+          onClick={onToggleFlag}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex-shrink-0 mt-1 ${
+            isFlagged
+              ? 'bg-amber-50 dark:bg-amber-950/30 border-amber-300 dark:border-amber-700 text-amber-600 dark:text-amber-400'
+              : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 hover:border-amber-300 hover:text-amber-500'
+          }`}
+        >
+          <svg className="w-3.5 h-3.5" fill={isFlagged ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+          </svg>
+          {isFlagged ? 'Belgilangan' : 'Belgilash'}
+        </button>
+      )}
+    </div>
+  );
+
+  if (isTwoPanel) {
+    // ── MCQ two-panel layout ──────────────────────────────────────────────────
+    return (
+      <div className="flex-1 h-full overflow-hidden bg-white dark:bg-gray-900">
+        <div className="flex h-full overflow-hidden">
           <div className="w-1/2 overflow-y-auto p-12 pr-16 border-r border-gray-100 dark:border-gray-800 custom-scrollbar">
             <div className="max-w-3xl ml-auto">
               <div className="flex items-start justify-between gap-3 mb-6">
                 <div>
                   <p className="text-[12px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-[0.2em] mb-1.5">
                     {subjectLabel} · {exercise.type.replace('_', ' ').toUpperCase()}
-                    {exercise.type === 'gap_fill' && !hasInlineMarkers && !isDialogueWithBlanks && (
-                      <span className="ml-2 text-[11px] normal-case font-semibold bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 px-1.5 py-0.5 rounded">
-                        o'qing
-                      </span>
-                    )}
                   </p>
-                  <h2 className="text-xl font-serif font-bold text-gray-900 dark:text-white">
-                    {exercise.title}
-                  </h2>
+                  <h2 className="text-xl font-serif font-bold text-gray-900 dark:text-white">{exercise.title}</h2>
                 </div>
                 {onToggleFlag && (
-                  <button
-                    type="button"
-                    onClick={onToggleFlag}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex-shrink-0 mt-1 ${
-                      isFlagged
-                        ? 'bg-amber-50 dark:bg-amber-950/30 border-amber-300 dark:border-amber-700 text-amber-600 dark:text-amber-400'
-                        : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 hover:border-amber-300 hover:text-amber-500'
-                    }`}
-                  >
-                    <svg className="w-3.5 h-3.5" fill={isFlagged ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
-                    </svg>
+                  <button type="button" onClick={onToggleFlag}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex-shrink-0 mt-1 ${isFlagged ? 'bg-amber-50 dark:bg-amber-950/30 border-amber-300 dark:border-amber-700 text-amber-600 dark:text-amber-400' : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 hover:border-amber-300 hover:text-amber-500'}`}>
+                    <svg className="w-3.5 h-3.5" fill={isFlagged ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" /></svg>
                     {isFlagged ? 'Belgilangan' : 'Belgilash'}
                   </button>
                 )}
               </div>
               {hasImage && (
                 <div className="mb-6">
-                  <img
-                    src={uploadsURL(exercise.image!)}
-                    alt="Exercise visual"
-                    className="w-full rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm object-contain bg-white"
-                    style={{ maxHeight: '420px' }}
-                  />
+                  <img src={uploadsURL(exercise.image!)} alt="Exercise visual" className="w-full rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm object-contain bg-white" style={{ maxHeight: '420px' }} />
                 </div>
               )}
-              {hasPassage && (
-                <div className="selection:bg-orange-100 dark:selection:bg-orange-950/40">
-                  {renderPassage()}
-                </div>
-              )}
+              {hasPassage && <div className="selection:bg-orange-100 dark:selection:bg-orange-950/40">{renderPassage()}</div>}
             </div>
           </div>
-        )}
-
-        {/* Right panel — questions */}
-        <div className={`${hasLeftPanel ? 'w-1/2' : 'w-full'} overflow-y-auto p-12 ${hasLeftPanel ? 'pl-16' : 'max-w-3xl mx-auto'} custom-scrollbar`}>
-          <div className={hasLeftPanel ? 'max-w-3xl' : 'max-w-2xl mx-auto'}>
-            {!hasLeftPanel && (
-              <div className="mb-8 flex items-start justify-between gap-3">
-                <div>
-                  <p className="text-[12px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-2">
-                    {subjectLabel} · {exercise.type.replace('_', ' ').toUpperCase()}
-                  </p>
-                  <h2 className="text-xl font-serif font-bold text-gray-900 dark:text-white">
-                    {exercise.title}
-                  </h2>
-                </div>
-                {onToggleFlag && (
-                  <button
-                    type="button"
-                    onClick={onToggleFlag}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all flex-shrink-0 mt-1 ${
-                      isFlagged
-                        ? 'bg-amber-50 dark:bg-amber-950/30 border-amber-300 dark:border-amber-700 text-amber-600 dark:text-amber-400'
-                        : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500 hover:border-amber-300 hover:text-amber-500'
-                    }`}
-                  >
-                    <svg className="w-3.5 h-3.5" fill={isFlagged ? 'currentColor' : 'none'} stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
-                    </svg>
-                    {isFlagged ? 'Belgilangan' : 'Belgilash'}
-                  </button>
-                )}
-              </div>
-            )}
-            {renderQuestions()}
+          <div className="w-1/2 overflow-y-auto p-12 pl-16 custom-scrollbar">
+            <div className="max-w-3xl">
+              {renderQuestions()}
+            </div>
           </div>
         </div>
       </div>
+    );
+  }
+
+  // ── Single-column layout (all non-MCQ types) ──────────────────────────────
+  return (
+    <div className="flex-1 h-full overflow-hidden bg-white dark:bg-gray-900">
+      <div className="h-full overflow-y-auto custom-scrollbar">
+        <div className="max-w-3xl mx-auto px-8 py-10">
+          {headerBlock}
+          {hasImage && (
+            <div className="mb-8">
+              <img src={uploadsURL(exercise.image!)} alt="Exercise visual" className="w-full rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm object-contain bg-white" style={{ maxHeight: '400px' }} />
+            </div>
+          )}
+          {hasPassage && (
+            <div className="mb-8 selection:bg-orange-100 dark:selection:bg-orange-950/40">
+              {renderPassage()}
+            </div>
+          )}
+          {!passageHandlesAnswers && renderQuestions()}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Inline error correction sentence with clickable words ─────────────────────
+
+interface InlineErrorSentenceProps {
+  q: ClientQuestion;
+  val: string;
+  onRecord: (v: string) => void;
+}
+
+function InlineErrorSentence({ q, val, onRecord }: InlineErrorSentenceProps) {
+  const [editIdx, setEditIdx] = React.useState<number | null>(null);
+  const [tempVal, setTempVal] = React.useState('');
+
+  // Split into tokens keeping spaces
+  const tokens = q.text.split(/(\s+)/);
+
+  const commit = (idx: number, newVal: string) => {
+    const original = tokens[idx].replace(/[.,!?;:'"()[\]]/g, '');
+    if (newVal.trim() && newVal.trim() !== original) {
+      onRecord(newVal.trim());
+    }
+    setEditIdx(null);
+  };
+
+  return (
+    <div>
+      <p className="font-serif text-[16px] text-gray-800 dark:text-gray-200 leading-loose flex flex-wrap items-baseline">
+        {tokens.map((token, i) => {
+          if (/^\s+$/.test(token)) return <span key={i}>{token}</span>;
+          const isEditing = editIdx === i;
+          if (isEditing) {
+            return (
+              <input
+                key={i}
+                autoFocus
+                type="text"
+                value={tempVal}
+                onChange={e => setTempVal(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' || e.key === 'Tab') { e.preventDefault(); commit(i, tempVal); }
+                  if (e.key === 'Escape') setEditIdx(null);
+                }}
+                onBlur={() => commit(i, tempVal)}
+                style={{ width: `${Math.max(tempVal.length + 2, 6)}ch` }}
+                className="border-b-2 border-orange-500 bg-transparent font-serif text-[16px] text-orange-700 dark:text-orange-300 focus:outline-none inline-block"
+              />
+            );
+          }
+          return (
+            <span
+              key={i}
+              onClick={() => { setEditIdx(i); setTempVal(token.replace(/[.,!?;:'"()[\]]$/, '')); }}
+              className="cursor-pointer hover:bg-orange-50 dark:hover:bg-orange-950/20 hover:text-orange-600 dark:hover:text-orange-400 rounded px-0.5 transition-all"
+            >
+              {token}
+            </span>
+          );
+        })}
+      </p>
+      {val && val !== '✓' && (
+        <p className="mt-1 text-[13px] font-semibold text-emerald-600 dark:text-emerald-400">
+          ✓ Correction: <span className="font-bold">{val}</span>
+        </p>
+      )}
     </div>
   );
 }

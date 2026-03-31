@@ -13,7 +13,7 @@ import PracticeTestRenderer from './PracticeTestRenderer';
 import { ClientExercise, ClientPracticeQuestion, SubmitAnswer } from '../../types';
 
 export default function TestTaking() {
-  const { phase, testSessionId, currentSection, title, sections, setAnswer, answers, getAllAnswers, goToNextSection, initTest } = useTest();
+  const { phase, testSessionId, currentSection, title, sections, setAnswer, answers, getAllAnswers, goToNextSection, completeTest, initTest } = useTest();
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
   const submittingRef = useRef(false);
@@ -107,13 +107,13 @@ export default function TestTaking() {
           sessionStorage.removeItem(SS_PIN);
           sessionStorage.removeItem(SS_ANSWERS);
         } catch {}
+        // Mark test as completed so StudentPage exits full-screen mode before navigating
+        completeTest();
         if (res?.data?.data?.id) {
           navigate(`/student/results/${res.data.data.id}`, { replace: true });
         } else {
           navigate('/student/results', { replace: true });
         }
-        // Do NOT call goToNextSection(null) here — it sets currentSection=null causing blank screen
-        // before React Router finishes navigating. Component unmounts naturally on navigate.
       }
     } catch (err: unknown) {
       console.error('Submit/Advance error:', err);
@@ -135,7 +135,7 @@ export default function TestTaking() {
       submittingRef.current = false;
       setSubmitting(false);
     }
-  }, [testSessionId, currentSection, sections, getAllAnswers, goToNextSection, navigate]);
+  }, [testSessionId, currentSection, sections, getAllAnswers, goToNextSection, completeTest, navigate]);
 
   // ── Autosave to server every 10 seconds ────────────────────────────────────
   useEffect(() => {
