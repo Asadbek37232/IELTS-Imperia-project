@@ -3,7 +3,7 @@
   "subject": "grammar",
   "variantGroup": "5_10",
   "type": "gap_fill",
-  "title": "Exercise — Amount, Number, Few, Little, Many, Much",
+  "title": "Amount, Number, Few, Little, Many, Much",
   "instruction": "Fill in the gaps with *amount*, *number*, *few*, *little*, *many* or *much*.",
   "passage": "How much sleep do we need?\n\nThe amount of sleep each person needs depends on many factors, including age. Infants generally require about 16 hours a day. For most adults, seven to eight hours a night appears to be the ideal amount of sleep, although a few people may need as little as five hours' sleep or as much as ten hours' sleep each day. Getting too little sleep creates a sleep debt, and eventually, your body will demand that the debt be repaid.\n\nA large number of people over 65 have frequent sleeping problems, such as insomnia, and deep sleep stages in many elderly people often become very short or stop completely. Microsleeps, or very brief episodes of sleep in an otherwise awake person, are another mark of sleep deprivation. In many cases, people are not aware that they are experiencing microsleeps. The widespread practice of burning the candle at both ends in western industrialized societies has created so much sleep deprivation that what is really abnormal sleepiness is now almost the norm.",
   "questions": [
@@ -30,12 +30,18 @@
     {
       "id": 5,
       "text": "...people may need as ___ as five hours' sleep",
-      "answers": ["little", "few"]
+      "answers": [
+        "little",
+        "few"
+      ]
     },
     {
       "id": 6,
       "text": "...or as ___ as ten hours' sleep each day.",
-      "answers": ["much", "many"]
+      "answers": [
+        "much",
+        "many"
+      ]
     },
     {
       "id": 7,

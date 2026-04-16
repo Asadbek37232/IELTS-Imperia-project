@@ -26,12 +26,12 @@
         {
             "id": 4,
             "text": "In my country the bride is the most important person at a wedding. (Emphasize: the bride)",
-            "answer": "In my country it is the bride who is the most important person at a wedding.|||In my country it is the bride that is the most important person at a wedding."
+            "answer": "In my country it is the bride who is the most important person at a wedding."
         },
         {
             "id": 5,
             "text": "Governments should be dealing with the causes of poverty, not the results of it. (Emphasize: the causes of poverty)",
-            "answer": "It is the causes of poverty that governments should be dealing with, not the results of it.|||It is the causes of poverty governments should be dealing with, not the results of it."
+            "answer": "It is the causes of poverty that governments should be dealing with, not the results of it."
         },
         {
             "id": 6,
@@ -41,7 +41,7 @@
         {
             "id": 7,
             "text": "When you are seriously ill your family suffer the most. (Emphasize: your family)",
-            "answer": "When you are seriously ill it is your family that suffer the most.|||When you are seriously ill it is your family who suffer the most."
+            "answer": "When you are seriously ill it is your family that suffer the most."
         }
     ]
 }

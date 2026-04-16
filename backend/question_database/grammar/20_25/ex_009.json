@@ -16,7 +16,7 @@
         {
             "id": 2,
             "text": "It is now much cheaper to rent a DVD at home so fewer people are going to the cinema these days. (due to)",
-            "answer": "Fewer people are going to the cinema these days due to the fact that it is now much cheaper to rent a DVD at home.|||Fewer people are going to the cinema these days due to it being much cheaper to rent a DVD at home."
+            "answer": "Fewer people are going to the cinema these days due to the fact that it is now much cheaper to rent a DVD at home."
         },
         {
             "id": 3,
@@ -36,7 +36,7 @@
         {
             "id": 6,
             "text": "The numbers of red deer in the wild increased slightly in the 1980s, although the increase was not sufficient to take them off the endangered species list. (in spite of)",
-            "answer": "In spite of the fact that the number of red deer in the wild increased slightly in the 1980s, it (the increase) was not sufficient to take them off the endangered species list.|||In spite of the slight increase in the number of red deer in the wild in the 1980s, this was not sufficient to take them off the endangered species list."
+            "answer": "In spite of the fact that the number of red deer in the wild increased slightly in the 1980s, it was not sufficient to take them off the endangered species list."
         }
     ]
 }

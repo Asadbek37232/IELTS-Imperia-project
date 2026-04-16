@@ -16,7 +16,7 @@
         {
             "id": 2,
             "text": "The Guggenheim Museum is in Bilbao. It only displays contemporary art.",
-            "answer": "The Guggenheim Museum, which is in Bilbao, only displays contemporary art.|||The Guggenheim Museum, which only displays contemporary art, is in Bilbao."
+            "answer": "The Guggenheim Museum, which is in Bilbao, only displays contemporary art."
         },
         {
             "id": 3,
@@ -26,12 +26,12 @@
         {
             "id": 4,
             "text": "The lecture was about current economic policy. It was not very easy to understand.",
-            "answer": "The lecture, which was about current economic policy, was not very easy to understand.|||The lecture, which was not very easy to understand, was about current economic policy."
+            "answer": "The lecture, which was about current economic policy, was not very easy to understand."
         },
         {
             "id": 5,
             "text": "In 1951 my parents arrived in New York. They stayed there for the rest of their lives.",
-            "answer": "My parents arrived in New York in 1951, where they stayed for the rest of their lives.|||In 1951 my parents arrived in New York, where they stayed for the rest of their lives."
+            "answer": "My parents arrived in New York in 1951, where they stayed for the rest of their lives."
         },
         {
             "id": 6,

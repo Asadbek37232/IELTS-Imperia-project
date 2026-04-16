@@ -3,7 +3,7 @@
   "subject": "grammar",
   "variantGroup": "1_5",
   "type": "gap_fill",
-  "title": "Exercise — Past Simple / Past Perfect Simple / Past Perfect Continuous",
+  "title": "Past Simple / Past Perfect Simple / Past Perfect Continuous",
   "instruction": "Fill in the gaps with the past simple, past perfect simple or past perfect continuous of the verbs in brackets.",
   "passage": "Last year my friends [1] (arrange) for us to try fire-walking, which is when you walk on hot coals. I [2] (always/be) fascinated by it and I [3] (hear) people say it was an unforgettable experience. I was very excited when I [4] (arrive) on the day, although beforehand I [5] (feel) a little frightened! My friends and I [6] (come) in the hope that by the end of the day we would be able to say we [7] (walk) across hot, burning coals.\n\nOur teacher was very good, and by teatime we [8] (learn) a great deal and had [9] (prepare) the fires. I [10] (expect) to be terrified when the time came to walk, but as I [11] (take off) my shoes and socks I [12] (not/feel) afraid. I [13] (approach) the coals as all my friends before me [14] (do), and started walking! I could feel the heat, but as I [15] (step) back onto the grass on the other end I knew the coals [16] (not/burn) my feet at all. As I [17] (hope), all my friends [18] (manage) the walk and none of us were burnt. The whole experience was amazing, and I just wished I [19] (do) it sooner.",
   "questions": [
@@ -15,12 +15,12 @@
     {
       "id": 2,
       "text": "I ___ (always/be) fascinated by it",
-      "answer": "'d always been"
+      "answer": "had always been"
     },
     {
       "id": 3,
       "text": "...and I ___ (hear) people say it was an unforgettable experience.",
-      "answer": "'d heard"
+      "answer": "had heard"
     },
     {
       "id": 4,
@@ -30,7 +30,7 @@
     {
       "id": 5,
       "text": "...although beforehand I ___ (feel) a little frightened!",
-      "answer": "'d been feeling"
+      "answer": "had been feeling"
     },
     {
       "id": 6,
@@ -40,12 +40,12 @@
     {
       "id": 7,
       "text": "...we came in the hope that by the end of the day we would be able to say we ___ (walk) across hot, burning coals.",
-      "answer": "'d walked"
+      "answer": "had walked"
     },
     {
       "id": 8,
       "text": "Our teacher was very good, and by teatime we ___ (learn) a great deal",
-      "answer": "'d learnt"
+      "answer": "had learnt"
     },
     {
       "id": 9,
@@ -55,7 +55,10 @@
     {
       "id": 10,
       "text": "I ___ (expect) to be terrified when the time came to walk,",
-      "answers": ["'d been expecting", "'d expected"]
+      "answers": [
+        "had been expecting",
+        "had expected"
+      ]
     },
     {
       "id": 11,
@@ -65,7 +68,7 @@
     {
       "id": 12,
       "text": "I ___ (not/feel) afraid.",
-      "answer": "didn't feel"
+      "answer": "did not feel"
     },
     {
       "id": 13,
@@ -85,12 +88,15 @@
     {
       "id": 16,
       "text": "I knew the coals ___ (not/burn) my feet at all.",
-      "answer": "hadn't burnt"
+      "answer": "had not burnt"
     },
     {
       "id": 17,
       "text": "As I ___ (hope), all my friends managed the walk",
-      "answers": ["'d been hoping", "'d hoped"]
+      "answers": [
+        "had been hoping",
+        "had hoped"
+      ]
     },
     {
       "id": 18,
@@ -100,7 +106,7 @@
     {
       "id": 19,
       "text": "I just wished I ___ (do) it sooner.",
-      "answer": "'d done"
+      "answer": "had done"
     }
   ]
 }

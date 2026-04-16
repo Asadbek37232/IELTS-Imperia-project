@@ -1,0 +1,51 @@
+{
+    "id": "vocabulary_1_5_003",
+    "subject": "vocabulary",
+    "variantGroup": "1_5",
+    "type": "gap_fill",
+    "title": "How to improve your diet",
+    "instruction": "Complete the gaps in the text below using words from the box:\n\n[ FACTORS | INGREDIENTS | MAINTAIN | NUTRIENTS | OVEREATING | OVERWEIGHT | SERVINGS | VARIETY ]",
+    "passage": "• Make sure that you eat a [1] of foods. It is important to eat from all five food groups.\n• Eat plenty of fruit and vegetables. These contain vital [2] and leading dietitians recommend eating at least two [3] of fruit and three of vegetables every day.\n• Try to [4] a healthy weight. Being too thin can cause as many health problems as being [5]. Remember, the correct weight for you depends on many different [6] including your age, height and sex.\n• Eat moderate portions and don't be tempted to order a larger size when eating out. Skipping meals can lead to [7] as you will be much hungrier later, so be sure to eat regularly if you want to curb your appetite.\n• You don't need to eliminate all of your favourite foods but do check the [8] on food labels and make sure that you reduce your intake of foods that are high in fats, sugar and salt.\n• If you have a food allergy, make sure you avoid any of the ingredients that can trigger an attack.",
+    "questions": [
+        {
+            "id": 1,
+            "text": "Gap 1",
+            "answer": "variety"
+        },
+        {
+            "id": 2,
+            "text": "Gap 2",
+            "answer": "nutrients"
+        },
+        {
+            "id": 3,
+            "text": "Gap 3",
+            "answer": "servings"
+        },
+        {
+            "id": 4,
+            "text": "Gap 4",
+            "answer": "maintain"
+        },
+        {
+            "id": 5,
+            "text": "Gap 5",
+            "answer": "overweight"
+        },
+        {
+            "id": 6,
+            "text": "Gap 6",
+            "answer": "factors"
+        },
+        {
+            "id": 7,
+            "text": "Gap 7",
+            "answer": "overeating"
+        },
+        {
+            "id": 8,
+            "text": "Gap 8",
+            "answer": "ingredients"
+        }
+    ]
+}

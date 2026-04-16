@@ -3,7 +3,7 @@
   "subject": "grammar",
   "variantGroup": "5_10",
   "type": "error_correction",
-  "title": "Exercise — Articles (a/an/the)",
+  "title": "Articles (a/an/the)",
   "instruction": "In some of these sentences there is a mistake with articles. Underline each mistake and write the correction. If the sentence is correct, tick (✓).\n\nExample: 1 → the classical music (already shown)",
   "passage": null,
   "questions": [
@@ -53,7 +53,10 @@
       "id": 9,
       "text": "Sorry I'm late – car wouldn't start this morning.",
       "errorWord": "car",
-      "answers": ["the car", "my car"]
+      "answers": [
+        "the car",
+        "my car"
+      ]
     },
     {
       "id": 10,

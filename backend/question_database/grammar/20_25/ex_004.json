@@ -16,7 +16,7 @@
         {
             "id": 2,
             "text": "2. At the beginning of the experiment, the chemicals ___ (place) in the beaker.",
-            "answer": "are placed|||were placed"
+            "answer": "are placed"
         },
         {
             "id": 3,
@@ -31,7 +31,7 @@
         {
             "id": 5,
             "text": "5. I can't drive you to the airport because my car ___ (service) tomorrow.",
-            "answer": "is being serviced|||is serviced"
+            "answer": "is being serviced"
         },
         {
             "id": 6,
@@ -61,7 +61,7 @@
         {
             "id": 11,
             "text": "11. People need ___ (encourage) to use public transport if we want to reduce our carbon emissions.",
-            "answer": "to be encouraged|||encouraging"
+            "answer": "to be encouraged"
         },
         {
             "id": 12,

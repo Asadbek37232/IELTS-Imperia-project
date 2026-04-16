@@ -3,7 +3,7 @@
   "subject": "grammar",
   "variantGroup": "5_10",
   "type": "gap_fill",
-  "title": "Exercise — Articles: Borneo Born and Bred",
+  "title": "Articles: Borneo Born and Bred",
   "instruction": "Fill in the gaps with *a/an* or *the* or put a cross (X) if no article is needed.\n\nExample: 1 → the (already shown)",
   "passage": "BORNEO BORN AND BRED\n\nLocal legends say that Borneo's few thousand wild elephants are descendants from those brought to the island from India or Malaysia as a gift to the sultan in the eighteenth century. Biologists from Columbia University's Centre for Environmental Research and Conservation compared DNA samples from Borneo elephants with Asian elephants in Sumatra, India and elsewhere. The findings confirmed their suspicions: Borneo's elephants are genetically different. In fact the DNA differences are so great between them and their closest relatives (elephants in Peninsular Malaysia) that the populations may have separated up to 300,000 years ago, say the scientists. The animals became isolated when the island became totally cut off from the mainland due to a rise in sea level. Borneo's elephants are, therefore, an important, separate population.",
   "questions": [
@@ -40,7 +40,10 @@
     {
       "id": 8,
       "text": "___ findings confirmed their suspicions: Borneo's elephants are genetically different.",
-      "answers": ["The", "Their"]
+      "answers": [
+        "The",
+        "Their"
+      ]
     },
     {
       "id": 9,

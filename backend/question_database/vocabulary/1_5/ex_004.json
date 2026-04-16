@@ -1,0 +1,51 @@
+{
+    "id": "vocabulary_1_5_004",
+    "subject": "vocabulary",
+    "variantGroup": "1_5",
+    "type": "gap_fill",
+    "title": "Improve this essay",
+    "instruction": "Improve this essay by replacing the words in brackets with ONE OR TWO words from this unit.",
+    "passage": "In the future we won't have to worry about what we eat. We'll just take a tablet to give us all that our body needs and cooking will become a thing of the past.\n\nIn our modern world we often look for quick solutions to our problems. We expect to be able to achieve a great deal with little effort. But I don't believe we can apply this notion to our diet and still remain healthy. Preparing a healthy meal can take a lot of time. First you need to have fresh ingredients. Pre-packaged foods can contain a lot of unhealthy additives and so they are not as (good for your body) [1] as fresh food. You also need to make sure to include a (lot of different foods) [2] to make sure that you receive all of the vitamins and minerals that are (very, very important) [3] to a healthy diet. It is not surprising then that some people want to find a simple solution to this in the form of a pill. Fast foods are very high in fat, sugar and salt and so we should eat them in small amounts. For some people, however, these foods have become their staple diet and as a result they are (fat) [4]. If we want to (stop) [5] this from becoming an even bigger problem in the future then we need to address this situation now. While vitamin tablets may be of some benefit, they are unlikely to be effective in the fight against (people getting too fat) [6]. Health authorities need to increase public awareness of these issues, but we also need to be realistic. Fast food is popular not only because it is convenient but also because it is tasty. Perhaps we should (strongly advise) [7] that people who eat fast food every day should at least (swap) [8] fast food with fresh food on every second day. Finally, we eat for pleasure as well as nutrition and for this reason I believe that pills will never replace well-cooked food.",
+    "questions": [
+        {
+            "id": 1,
+            "text": "good for your body",
+            "answer": "nutritious"
+        },
+        {
+            "id": 2,
+            "text": "lot of different foods",
+            "answer": "variety of"
+        },
+        {
+            "id": 3,
+            "text": "very, very important",
+            "answer": "vital"
+        },
+        {
+            "id": 4,
+            "text": "fat",
+            "answer": "overweight"
+        },
+        {
+            "id": 5,
+            "text": "stop",
+            "answer": "prevent"
+        },
+        {
+            "id": 6,
+            "text": "people getting too fat",
+            "answer": "obesity"
+        },
+        {
+            "id": 7,
+            "text": "strongly advise",
+            "answer": "recommend"
+        },
+        {
+            "id": 8,
+            "text": "swap",
+            "answer": "alternate"
+        }
+    ]
+}

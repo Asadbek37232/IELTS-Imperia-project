@@ -1,0 +1,51 @@
+{
+    "id": "vocabulary_1_5_005",
+    "subject": "vocabulary",
+    "variantGroup": "1_5",
+    "type": "gap_fill",
+    "title": "Life and Living",
+    "instruction": "Complete the words or phrases in the sentences with 'life' or 'living'.\n\nVocabulary note:\nNote the difference between 'life' and 'living'. 'Life' is used to refer to the period between birth and death, 'living' is used to refer to being alive, 'make a living' refers to earning money.",
+    "passage": null,
+    "questions": [
+        {
+            "id": 1,
+            "text": "Going to Egypt and seeing the pyramids was a once in a ___ time opportunity for me.",
+            "answer": "life"
+        },
+        {
+            "id": 2,
+            "text": "The standard of ___ in my country is very good; there are not many poor people there.",
+            "answer": "living"
+        },
+        {
+            "id": 3,
+            "text": "In my job as a nurse I get to meet people from all walks of ___ .",
+            "answer": "life"
+        },
+        {
+            "id": 4,
+            "text": "For me, being a vegetarian is not just about diet, it has become a way of ___ .",
+            "answer": "life"
+        },
+        {
+            "id": 5,
+            "text": "Many people only think about bills they need to pay and forget to allow for everyday ___ expenses when they calculate a budget.",
+            "answer": "living"
+        },
+        {
+            "id": 6,
+            "text": "It was a ___ long ambition of mine to travel to the Arctic Circle and see the northern lights.",
+            "answer": "life"
+        },
+        {
+            "id": 7,
+            "text": "A rise in petrol prices inevitably leads to a rise in the cost of ___ .",
+            "answer": "living"
+        },
+        {
+            "id": 8,
+            "text": "The happiest people are those who have found a way to make a ___ from their hobby.",
+            "answer": "living"
+        }
+    ]
+}

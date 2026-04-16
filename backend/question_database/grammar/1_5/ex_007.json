@@ -3,7 +3,7 @@
   "subject": "grammar",
   "variantGroup": "1_5",
   "type": "gap_fill",
-  "title": "Exercise — Present Perfect Simple / Continuous",
+  "title": "Present Perfect Simple / Continuous",
   "instruction": "Fill in the gaps with a verb from the box in the present perfect simple or present perfect continuous. You will need to use some verbs more than once.\n\nVerb box: be | do | feel | have | live | pass | study | start | take | travel | want | work\n\nNote: Questions 17–21 are open-ended personal questions (answers will vary).",
   "passage": "Interviewer: How long [1] (you) here?\nStudent: I [2] in London for the past three years. I come from Japan originally. I [3] at a college here since I arrived.\nInterviewer: [4] (you) any travelling over the past three years?\nStudent: Yes, I [5] really lucky. I have long holidays so I [6] all over Europe. I especially liked Spain.\nInterviewer: What is the most interesting thing you [7] recently?\nStudent: Well, I [8] to play tennis, and I [9] singing lessons for a few months now too. But the thing that I am most proud of is that I [10] (just) my driving test. It's the first time I [11] it so I'm really pleased but I [12] (never) so nervous in my life!\nInterviewer: How do you think English will be useful in your life?\nStudent: I [13] a Hospitality and Tourism course over here, so I need English for my studies and my job. I [14] (always) to work in the tourist industry because I [15] (always) interested in history and cultural sites, and I [16] (already) as a tour guide in my home town.",
   "questions": [
@@ -15,12 +15,12 @@
     {
       "id": 2,
       "text": "I ___ in London for the past three years.",
-      "answer": "'ve been living"
+      "answer": "have been living"
     },
     {
       "id": 3,
       "text": "I ___ at a college here since I arrived.",
-      "answer": "'ve been studying"
+      "answer": "have been studying"
     },
     {
       "id": 4,
@@ -30,62 +30,71 @@
     {
       "id": 5,
       "text": "Yes, I ___ really lucky.",
-      "answer": "'ve been"
+      "answer": "have been"
     },
     {
       "id": 6,
       "text": "I ___ all over Europe.",
-      "answer": "'ve travelled"
+      "answer": "have travelled"
     },
     {
       "id": 7,
       "text": "What is the most interesting thing you ___ recently?",
-      "answer": "'ve done"
+      "answer": "have done"
     },
     {
       "id": 8,
       "text": "Well, I ___ to play tennis,",
-      "answer": "'ve started"
+      "answer": "have  started"
     },
     {
       "id": 9,
       "text": "...and I ___ singing lessons for a few months now too.",
-      "answers": ["'ve been having", "'ve been taking"]
+      "answers": [
+        "have been having",
+        "have been taking"
+      ]
     },
     {
       "id": 10,
       "text": "I ___ (just) my driving test.",
-      "answer": "'ve just passed"
+      "answer": "have just passed"
     },
     {
       "id": 11,
       "text": "It's the first time I ___ it",
-      "answer": "'ve taken"
+      "answer": "have taken"
     },
     {
       "id": 12,
       "text": "I ___ (never) so nervous in my life!",
-      "answers": ["'ve never felt", "'ve never been"]
+      "answers": [
+        "have never felt",
+        "have never been"
+      ]
     },
     {
       "id": 13,
       "text": "I ___ a Hospitality and Tourism course over here,",
-      "answers": ["'ve been doing", "'ve been taking"]
+      "answers": [
+        "have been doing",
+        "have been taking"
+      ]
     },
     {
       "id": 14,
       "text": "I ___ (always) to work in the tourist industry",
-      "answer": "'ve always wanted"
+      "answer": "have always wanted"
     },
     {
       "id": 15,
       "text": "...because I ___ (always) interested in history and cultural sites,",
-      "answer": "'ve always been"
+      "answer": "have always been"
     },
     {
       "id": 16,
       "text": "...and I ___ (already) as a tour guide in my home town.",
-      "answer": "'ve already worked"
+      "answer": "have already worked"
     }
   ]
 }

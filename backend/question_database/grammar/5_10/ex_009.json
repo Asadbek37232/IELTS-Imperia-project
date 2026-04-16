@@ -3,7 +3,7 @@
   "subject": "grammar",
   "variantGroup": "5_10",
   "type": "gap_fill",
-  "title": "Exercise — Determiners and Pronouns (Kuala Lumpur & London)",
+  "title": "Determiners and Pronouns (Kuala Lumpur & London)",
   "instruction": "Fill in the gaps with words from the box.\n\nWord box: both | each | every | my | neither | none | this | that | their | those",
   "passage": "My home town is smaller than London, but there are some similarities. Each of the two cities is famous for its architecture. For example, Both Kuala Lumpur and London have tall, modern buildings, set amongst older historical buildings. Although both cities have rivers running through them, neither city is by the sea, which is a shame, as I think some of the most beautiful cities in the world are by the sea.\n\nEvery major city in the world has one thing in common – being large and busy – and this is true of both London and Kuala Lumpur. In fact, some people don't like my city because it is so noisy and busy, but that is one reason why I love it. A lot of city markets take place in the day-time, but in my home city they don't open until it's dark! Malaysians tend to buy all their groceries at the night markets. In London people tend to use supermarkets for their food shopping.\n\nIt is always hot in Kuala Lumpur, but London can get very cold. That's probably why you get outdoor restaurants all over Kuala Lumpur all year round whereas in London there are almost none in the winter. In some restaurants in Kuala Lumpur, you can go to the kitchen and point at the food and say, 'I'll have one of those, please!!' You can't do that in London!",
   "questions": [
@@ -25,17 +25,26 @@
     {
       "id": 4,
       "text": "___ major city in the world has one thing in common – being large and busy –",
-      "answers": ["Every", "Each"]
+      "answers": [
+        "Every",
+        "Each"
+      ]
     },
     {
       "id": 5,
       "text": "...and ___ is true of both London and Kuala Lumpur.",
-      "answers": ["this", "that"]
+      "answers": [
+        "this",
+        "that"
+      ]
     },
     {
       "id": 6,
       "text": "...some people don't like my city because it is so noisy and busy, but ___ is one reason why I love it.",
-      "answers": ["that", "this"]
+      "answers": [
+        "that",
+        "this"
+      ]
     },
     {
       "id": 7,
@@ -60,7 +69,10 @@
     {
       "id": 11,
       "text": "...'I'll have one of ___, please!!'",
-      "answers": ["those", "these"]
+      "answers": [
+        "those",
+        "these"
+      ]
     }
   ]
 }

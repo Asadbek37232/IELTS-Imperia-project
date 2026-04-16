@@ -1,0 +1,83 @@
+{
+    "id": "vocabulary_1_5_007",
+    "subject": "vocabulary",
+    "variantGroup": "1_5",
+    "type": "mcq",
+    "title": "Choose the correct words",
+    "instruction": "Choose the correct words to complete each sentence.",
+    "passage": "",
+    "questions": [
+        {
+            "id": 1,
+            "text": "I would really like to ___ the ancient Egyptians.",
+            "options": {
+                "A": "learn about",
+                "B": "study about"
+            },
+            "answer": "A"
+        },
+        {
+            "id": 2,
+            "text": "We need to ___ where to buy the tickets for the concert.",
+            "options": {
+                "A": "find out",
+                "B": "know"
+            },
+            "answer": "A"
+        },
+        {
+            "id": 3,
+            "text": "I got into trouble at school because I didn't ___ my multiplication tables.",
+            "options": {
+                "A": "know",
+                "B": "find out"
+            },
+            "answer": "A"
+        },
+        {
+            "id": 4,
+            "text": "I did well in the test because I had ___ how to spell all of the words on the list.",
+            "options": {
+                "A": "known",
+                "B": "learned"
+            },
+            "answer": "B"
+        },
+        {
+            "id": 5,
+            "text": "Excuse me, do you ___ where the nearest post office is?",
+            "options": {
+                "A": "find out",
+                "B": "know"
+            },
+            "answer": "B"
+        },
+        {
+            "id": 6,
+            "text": "It was difficult for me to ___ at home, because we didn't have a lot of space.",
+            "options": {
+                "A": "learn",
+                "B": "study"
+            },
+            "answer": "B"
+        },
+        {
+            "id": 7,
+            "text": "I want to ___ to drive a car.",
+            "options": {
+                "A": "learn how",
+                "B": "study how"
+            },
+            "answer": "A"
+        },
+        {
+            "id": 8,
+            "text": "I think you can only really ___ experience.",
+            "options": {
+                "A": "learn from",
+                "B": "learn with"
+            },
+            "answer": "A"
+        }
+    ]
+}

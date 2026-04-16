@@ -1,0 +1,61 @@
+{
+    "id": "vocabulary_1_5_006",
+    "subject": "vocabulary",
+    "variantGroup": "1_5",
+    "type": "gap_fill",
+    "title": "Study Habits",
+    "instruction": "Complete the text with the correct form of the verbs in the box. There may be more than one possible answer so try to use each verb once only.\n\n[ CONCENTRATE | DO | LEARN | OVERCOME | ORGANISE | STUDY | TAKE | TEACH | REVIEW | REVISE ]",
+    "passage": "Even the most studious among you will probably have difficulty studying at some stage in your academic career. If or when this happens, the only way to [1] this problem is to go back to basics. First, make sure you have a comfortable environment to [2] in. Some students need to have a quiet space to themselves and can't [3] if there are too many distractions. Others need some sort of background noise, such as music or the company of friends. Whatever your personal preference is, you need to [4] this first of all. Next, make sure you have all of the equipment or tools that you need. For example, if you are [5] a geography course and you have to [6] about countries and their capital cities then you will need to have your atlas to hand. If you're [7] your maths homework then be sure to find your calculator, ruler, protractor and compass before you start. Perhaps you're not preparing a homework assignment or project, but are trying to [8] for an exam. If so, you need to know exactly what is on your curriculum. You should also [9] your notes and make sure that you have a clear understanding of what your lecturers have [10] you. Of course, people with a learning disorder such as dyslexia may need to work harder than others at their studies as they often struggle to read even relatively simple texts.",
+    "questions": [
+        {
+            "id": 1,
+            "text": "Gap 1",
+            "answer": "overcome"
+        },
+        {
+            "id": 2,
+            "text": "Gap 2",
+            "answer": "study"
+        },
+        {
+            "id": 3,
+            "text": "Gap 3",
+            "answer": "concentrate"
+        },
+        {
+            "id": 4,
+            "text": "Gap 4",
+            "answer": "organise"
+        },
+        {
+            "id": 5,
+            "text": "Gap 5",
+            "answer": "taking"
+        },
+        {
+            "id": 6,
+            "text": "Gap 6",
+            "answer": "learn"
+        },
+        {
+            "id": 7,
+            "text": "Gap 7",
+            "answer": "doing"
+        },
+        {
+            "id": 8,
+            "text": "Gap 8",
+            "answer": "revise"
+        },
+        {
+            "id": 9,
+            "text": "Gap 9",
+            "answer": "review"
+        },
+        {
+            "id": 10,
+            "text": "Gap 10",
+            "answer": "taught"
+        }
+    ]
+}

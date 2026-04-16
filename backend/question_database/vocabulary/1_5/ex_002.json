@@ -1,0 +1,51 @@
+{
+    "id": "vocabulary_1_5_002",
+    "subject": "vocabulary",
+    "variantGroup": "1_5",
+    "type": "gap_fill",
+    "title": "Adolescence: Key Vocabulary in Context",
+    "instruction": "Read this text about development in adolescence. Then complete the following sentences with words from the text.",
+    "passage": "The final stage before adulthood is adolescence. This is a period of transition for teenagers and there are many crucial milestones. Socially and emotionally, teens worry that they may not be developing at the same rate as their peers. They become extremely self-conscious and may be overly sensitive about their appearance. Teens may rebel against their parents but are also more able to accept the consequences of their actions.\n\nThis is also a period of enormous physical change and adolescents experience changes in their physical development at a rate unparalleled since infancy. These changes include significant gains in height and weight. Within a year, boys and girls can gain an average of 4.1 inches and 3.5 inches in height respectively. This growth spurt typically occurs two years earlier for girls than for boys and can tend to make both sexes go through a clumsy phase. In terms of their cognitive development, adolescents have greater reasoning skills and have developed the ability to think logically and hypothetically. They are also able to discuss more abstract concepts. They should also have developed strategies to help them study.",
+    "questions": [
+        {
+            "id": 1,
+            "text": "First-year students often struggle with the ___ from high school to university.",
+            "answer": "transition"
+        },
+        {
+            "id": 2,
+            "text": "The ___ at which a change occurs can cause problems for both the very young and the elderly.",
+            "answer": "rate"
+        },
+        {
+            "id": 3,
+            "text": "It can be less stressful to make a presentation to your ___ rather than to your teachers.",
+            "answer": "peers"
+        },
+        {
+            "id": 4,
+            "text": "The increase in violence among young people may be a ___ of watching too much violence on TV and in video games.",
+            "answer": "consequence"
+        },
+        {
+            "id": 5,
+            "text": "Petrol prices are increasing at a speed that is ___ since the oil crisis of the 70s.",
+            "answer": "unparalleled"
+        },
+        {
+            "id": 6,
+            "text": "Teenagers ___ rebel against their parents between the ages of 14 and 16.",
+            "answer": "typically"
+        },
+        {
+            "id": 7,
+            "text": "In part three of the speaking test you are expected to be able to talk about more ___ topics.",
+            "answer": "abstract"
+        },
+        {
+            "id": 8,
+            "text": "Infinity is a very difficult ___ for children to grasp.",
+            "answer": "concept"
+        }
+    ]
+}

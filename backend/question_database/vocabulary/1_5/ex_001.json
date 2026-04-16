@@ -1,0 +1,51 @@
+{
+    "id": "vocabulary_1_5_001",
+    "subject": "vocabulary",
+    "variantGroup": "1_5",
+    "type": "gap_fill",
+    "title": "Family and Relationship Vocabulary in Diverse Contexts",
+    "instruction": "A lot of words connected with families and relationships can also be used in a different context. Complete the sentences with a word from the box: \n \n [ ADOPT | CONFLICT | FAMILY | NURTURE | RELATED | RELATION | RELATIONSHIP | RELATIVE ]",
+    "passage": "",
+    "questions": [
+        {
+            "id": 1,
+            "text": "The wolf is a member of the dog ___.",
+            "answer": "family"
+        },
+        {
+            "id": 2,
+            "text": "The company decided to ___ a new approach to staff recruitment.",
+            "answer": "adopt"
+        },
+        {
+            "id": 3,
+            "text": "The study found a strong ___ between a lack of friends and sibling rivalry.",
+            "answer": "relationship"
+        },
+        {
+            "id": 4,
+            "text": "Whether you think the price of goods is high is ___ to the amount of money you earn.",
+            "answer": "relative"
+        },
+        {
+            "id": 5,
+            "text": "Studies have shown that stress in adulthood can be ___ to an unhappy childhood.",
+            "answer": "related"
+        },
+        {
+            "id": 6,
+            "text": "Good teachers identify the talents of their students and ___ them.",
+            "answer": "nurture"
+        },
+        {
+            "id": 7,
+            "text": "This evidence seems to ___ with the findings from previous studies.",
+            "answer": "conflict"
+        },
+        {
+            "id": 8,
+            "text": "I am writing in ___ to the job advertisement in yesterday’s paper.",
+            "answer": "relation"
+        }
+    ]
+}

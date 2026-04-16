@@ -12,7 +12,7 @@
             "id": 1,
             "text": "I want to get in touch with the woman which we met at the meeting last week.",
             "errorWord": "which",
-            "answer": "who|||whom"
+            "answer": "who"
         },
         {
             "id": 2,
@@ -36,7 +36,7 @@
             "id": 5,
             "text": "It's the one which in you have written your lecture notes.",
             "errorWord": "which in",
-            "answer": "which you have written your lecture notes in|||in which"
+            "answer": "which you have written your lecture notes in"
         },
         {
             "id": 6,
@@ -48,7 +48,7 @@
             "id": 7,
             "text": "I want some of those bread rolls what we had last week.",
             "errorWord": "what",
-            "answer": "which|||that"
+            "answer": "which"
         },
         {
             "id": 8,
