@@ -4,17 +4,10 @@ import { Exercise, SectionSubject, VARIANT_GROUPS, PracticeQuestion, ClientPract
 
 const DB_DIR = path.resolve(__dirname, '../../question_database');
 
-// In-memory caches to avoid repetitive disk I/O
-const EXERCISE_CACHE: Record<string, Exercise[]> = {};
-const PRACTICE_CACHE: Record<string, PracticeQuestion[]> = {};
-
 /**
  * Load all exercises from a single variant group folder.
  */
 export function loadExercisesFromGroup(subject: string, group: string): Exercise[] {
-  const cacheKey = `${subject.toLowerCase()}:${group}`;
-  if (EXERCISE_CACHE[cacheKey]) return EXERCISE_CACHE[cacheKey];
-
   const subjectDir = subject.toLowerCase(); // "grammar" | "vocabulary"
   const dir = path.join(DB_DIR, subjectDir, group);
 
@@ -33,7 +26,6 @@ export function loadExercisesFromGroup(subject: string, group: string): Exercise
     }
   }
 
-  EXERCISE_CACHE[cacheKey] = exercises;
   return exercises;
 }
 
@@ -88,9 +80,6 @@ export function countAvailableExercises(subject: string, groups: string[]): numb
  * Load practice test questions from a single variant group folder.
  */
 export function loadPracticeQuestionsFromGroup(subject: string, group: string): PracticeQuestion[] {
-  const cacheKey = `${subject.toLowerCase()}:${group}`;
-  if (PRACTICE_CACHE[cacheKey]) return PRACTICE_CACHE[cacheKey];
-
   const subjectDir = subject.toLowerCase(); // "grammar" | "vocabulary"
   const dir = path.join(DB_DIR, 'practice_tests', subjectDir, group);
 
@@ -109,7 +98,6 @@ export function loadPracticeQuestionsFromGroup(subject: string, group: string): 
     }
   }
 
-  PRACTICE_CACHE[cacheKey] = questions;
   return questions;
 }
 
