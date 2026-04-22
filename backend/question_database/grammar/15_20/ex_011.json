@@ -11,52 +11,87 @@
         {
             "id": 1,
             "text": "2. (you/ask):",
-            "answer": "wish you'd asked|||wish you had asked"
+            "answers": [
+                "wish you'd asked",
+                "wish you would ask",
+                "wish you had asked"
+            ]
         },
         {
             "id": 2,
             "text": "3. (I/not/choose):",
-            "answer": "wish I hadn't chosen|||wish I had not chosen|||shouldn't have chosen|||should not have chosen"
+            "answers": [
+                "wish I hadn't chosen",
+                "wish I had not chosen",
+                "shouldn't have chosen",
+                "should not have chosen"
+            ]
         },
         {
             "id": 3,
             "text": "3. (choose):",
-            "answer": "should have chosen"
+            "answers": [
+                "should have chosen",
+                "should not have chosen"
+            ]
         },
         {
             "id": 4,
             "text": "4. (I/study):",
-            "answer": "wish I'd studied|||wish I had studied"
+            "answers": [
+                "wish I'd studied",
+                "wish I had studied"
+            ]
         },
         {
             "id": 5,
             "text": "5. (he/stop):",
-            "answer": "wish he'd stop|||wish he would stop"
+            "answers": [
+                "wish he'd stop",
+                "wish he would stop"
+            ]
         },
         {
             "id": 6,
             "text": "6. (let):",
-            "answer": "should have let"
+            "answers": [
+                "should have let",
+                "should not have let"
+            ]
         },
         {
             "id": 7,
             "text": "7. (I/have):",
-            "answer": "wish I had"
+            "answers": [
+                "wish I had",
+                "wish I'd had"
+            ]
         },
         {
             "id": 8,
             "text": "8. (it/stop):",
-            "answer": "wish it would stop"
+            "answers": [
+                "wish it would stop",
+                "wish it stopped"
+            ]
         },
         {
             "id": 9,
             "text": "9. (I/not/do):",
-            "answer": "wish I hadn't done|||wish I had not done|||shouldn't have done|||should not have done"
+            "answers": [
+                "wish I hadn't done",
+                "wish I had not done",
+                "shouldn't have done",
+                "should not have done"
+            ]
         },
         {
             "id": 10,
             "text": "10. (not/tell):",
-            "answer": "shouldn't have told|||should not have told"
+            "answers": [
+                "shouldn't have told",
+                "should not have told"
+            ]
         }
     ]
 }

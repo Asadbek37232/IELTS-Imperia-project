@@ -4,7 +4,7 @@
     "variantGroup": "15_20",
     "type": "error_correction",
     "title": "Mixed Conditionals: Mistake correction",
-    "instruction": "Find and correct the one mistake in each sentence below.",
+    "instruction": "Find and correct the one mistake in each sentence below. Do not write the full sentence, only the correction.",
     "image": null,
     "passage": null,
     "questions": [
