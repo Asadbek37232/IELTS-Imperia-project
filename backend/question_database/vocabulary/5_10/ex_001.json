@@ -10,42 +10,82 @@
         {
             "id": 1,
             "text": "Bill: Hello, Sam, what a surprise meeting you here!\nSam: ___",
-            "answer": "You can say that again!"
+            "answers": [
+                "You can say that again!",
+                "you can say that again",
+                "YOU CAN SAY THAT AGAIN!",
+                "YOU CAN SAY THAT AGAIN"
+            ]
         },
         {
             "id": 2,
             "text": "Nuclear power has its problems. However, ___, many people believe it is the energy source of the future.",
-            "answer": "having said that"
+            "answers": [
+                "having said that",
+                "Having said that",
+                "HAVING SAID THAT",
+                "having said that"
+            ]
         },
         {
             "id": 3,
             "text": "___ switching to solar energy, although it is still too expensive for many people.",
-            "answer": "There is something to be said for"
+            "answers": [
+                "There is something to be said for",
+                "There is something to be said for",
+                "THERE IS SOMETHING TO BE SAID FOR",
+                "there is something to be said for"
+            ]
         },
         {
             "id": 4,
             "text": "Life without a constant supply of water can be difficult, ___.",
-            "answer": "to say the least"
+            "answers": [
+                "to say the least",
+                "To say the least",
+                "TO SAY THE LEAST",
+                "to say the least"
+            ]
         },
         {
             "id": 5,
             "text": "___, there is little we can do to save the environment without the full support of industry and the government.",
-            "answer": "When all is said and done"
+            "answers": [
+                "When all is said and done",
+                "When all is said and done",
+                "WHEN ALL IS SAID AND DONE",
+                "when all is said and done"
+            ]
         },
         {
             "id": 6,
             "text": "The tanker spilled 5,000 megalitres of oil into the ocean. ___, this had a devastating effect on marine life in the area.",
-            "answer": "Needless to say"
+            "answers": [
+                "Needless to say",
+                "Needless to say",
+                "NEEDLESS TO SAY",
+                "needless to say"
+            ]
         },
         {
             "id": 7,
             "text": "There is a clear link between humans and environmental problems. ___, wherever humans live, they damage the environment in some way.",
-            "answer": "That is to say"
+            "answers": [
+                "That is to say",
+                "That is to say",
+                "THAT IS TO SAY",
+                "that is to say"
+            ]
         },
         {
             "id": 8,
             "text": "I think it's important for everyone to ___ in how the government is elected.",
-            "answer": "have a say"
+            "answers": [
+                "have a say",
+                "Have a say",
+                "HAVE A SAY",
+                "have a say"
+            ]
         }
     ]
 }

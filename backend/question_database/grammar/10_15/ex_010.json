@@ -11,62 +11,103 @@
         {
             "id": 1,
             "text": "1. (you/think):",
-            "answer": "do you have to think"
+            "answers": [
+                "do you have to think",
+                "do you have got to think"
+            ]
         },
         {
             "id": 2,
             "text": "2. (consider):",
-            "answer": "have to consider|||ought to consider"
+            "answers": [
+                "have to consider",
+                "ought to consider",
+                "have got to consider"
+            ]
         },
         {
             "id": 3,
             "text": "3. (have):",
-            "answer": "have to have"
+            "answers": [
+                "have to have",
+                "have got to have"
+            ]
         },
         {
             "id": 4,
             "text": "4. (work):",
-            "answer": "ought to work"
+            "answers": [
+                "ought to work",
+                "have to work",
+                "have got to work"
+            ]
         },
         {
             "id": 5,
             "text": "5. (travel):",
-            "answer": "don't have to travel"
+            "answers": [
+                "do not have to travel",
+                "don't have to travel"
+            ]
         },
         {
             "id": 6,
             "text": "6. (learn):",
-            "answer": "ought to learn"
+            "answers": [
+                "ought to learn",
+                "have to learn",
+                "have got to learn"
+            ]
         },
         {
             "id": 7,
             "text": "7. (shout):",
-            "answer": "mustn't shout"
+            "answers": [
+                "must not shout",
+                "mustn't shout"
+            ]
         },
         {
             "id": 8,
             "text": "8. (always/walk):",
-            "answer": "must always walk"
+            "answers": [
+                "must always walk",
+                "Must always walk"
+            ]
         },
         {
             "id": 9,
             "text": "9. (find out):",
-            "answer": "ought to find out"
+            "answers": [
+                "ought to find out",
+                "have to find out",
+                "have got to find out"
+            ]
         },
         {
             "id": 10,
             "text": "10. (you/arrange):",
-            "answer": "do you have to arrange"
+            "answers": [
+                "do you have to arrange",
+                "do you have got to arrange"
+            ]
         },
         {
             "id": 11,
             "text": "11. (have):",
-            "answer": "have to have"
+            "answers": [
+                "have to have",
+                "have got to have"
+            ]
         },
         {
             "id": 12,
             "text": "12. (organise):",
-            "answer": "ought to organise|||have to organise"
+            "answers": [
+                "ought to organise",
+                "have to organise",
+                "have got to organise"
+            ]
         }
     ]
 }

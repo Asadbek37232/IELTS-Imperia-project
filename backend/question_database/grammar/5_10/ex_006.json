@@ -4,7 +4,7 @@
   "variantGroup": "5_10",
   "type": "error_correction",
   "title": "Articles (a/an/the)",
-  "instruction": "In some of these sentences there is a mistake with articles. Underline each mistake and write the correction. If the sentence is correct, tick (✓).\n\nExample: 1 → the classical music (already shown)",
+  "instruction": "In some of these sentences there is a mistake with articles. Write only the noun with the correct article. If the sentence is correct, tick (✓).\n\nExample: 1 → the classical music (already shown)",
   "passage": null,
   "questions": [
     {

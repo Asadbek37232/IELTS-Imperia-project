@@ -4,7 +4,7 @@
     "variantGroup": "10_15",
     "type": "error_correction",
     "title": "Reporting Mistakes",
-    "instruction": "Correct the mistakes in these sentences. Type the correct version in the input box.",
+    "instruction": "Correct the mistakes in these sentences. Type the correct version in the input box. Do not write the whole sentence. Write only the corrected phrase.",
     "image": null,
     "passage": null,
     "questions": [
@@ -12,73 +12,145 @@
             "id": 1,
             "text": "I met Annie and she said me she was getting married.",
             "errorWord": "she said me",
-            "answer": "she told me|||she said"
+            "answers": [
+                "she told me",
+                "She told me",
+                "SHE TOLD ME",
+                "she told me",
+                "she said",
+                "She said",
+                "SHE SAID",
+                "she said"
+            ]
         },
         {
             "id": 2,
             "text": "The education minister encouraged students take out a loan to cover their fees.",
             "errorWord": "students take out",
-            "answer": "students to take out"
+            "answers": [
+                "students to take out",
+                "Students to take out",
+                "STUDENTS TO TAKE OUT",
+                "students to take out",
+                "students take out",
+                "Students take out",
+                "STUDENTS TAKE OUT",
+                "students take out"
+            ]
         },
         {
             "id": 3,
             "text": "At the interview he asked did I want to start the job tomorrow!",
             "errorWord": "did I want",
-            "answer": "if I wanted|||whether I wanted"
+            "answers": [
+                "if I wanted",
+                "If I wanted",
+                "IF I WANTED",
+                "if I wanted",
+                "whether I wanted",
+                "Whether I wanted",
+                "WHETHER I WANTED",
+                "whether I wanted"
+            ]
         },
         {
             "id": 4,
             "text": "The speaker urged people that they should vote for him.",
             "errorWord": "that they should vote",
-            "answer": "to vote"
+            "answers": [
+                "to vote",
+                "To vote",
+                "TO VOTE",
+                "to vote"
+            ]
         },
         {
             "id": 5,
             "text": "We agreed making our presentation to the group first.",
             "errorWord": "making",
-            "answer": "to make"
+            "answers": [
+                "to make",
+                "To make",
+                "TO MAKE",
+                "to make"
+            ]
         },
         {
             "id": 6,
             "text": "My tutor promised mark the first draft of my dissertation immediately.",
             "errorWord": "promised mark",
-            "answer": "promised to mark"
+            "answers": [
+                "promised to mark",
+                "Promised to mark",
+                "PROMISED TO MARK",
+                "promised to mark"
+            ]
         },
         {
             "id": 7,
             "text": "Jacques invited us going to his house for dinner on Friday.",
             "errorWord": "going",
-            "answer": "to go"
+            "answers": [
+                "to go",
+                "To go",
+                "TO GO",
+                "to go"
+            ]
         },
         {
             "id": 8,
             "text": "During the Speaking module the examiner asked me what were my hobbies.",
             "errorWord": "were my hobbies",
-            "answer": "my hobbies were"
+            "answers": [
+                "my hobbies were",
+                "My hobbies were",
+                "MY HOBBIES WERE",
+                "my hobbies were"
+            ]
         },
         {
             "id": 9,
             "text": "The customers complained the quality of the food.",
             "errorWord": "complained the quality",
-            "answer": "complained about the quality"
+            "answers": [
+                "complained about the quality",
+                "Complained about the quality",
+                "COMPLAINED ABOUT THE QUALITY",
+                "complained about the quality"
+            ]
         },
         {
             "id": 10,
             "text": "When the college announced about the changes, everyone was worried.",
             "errorWord": "announced about",
-            "answer": "announced"
+            "answers": [
+                "announced",
+                "Announced",
+                "ANNOUNCED",
+                "announced"
+            ]
         },
         {
             "id": 11,
             "text": "I wanted to pay for myself but my boyfriend insisted to pay.",
             "errorWord": "insisted to pay",
-            "answer": "insisted on paying"
+            "answers": [
+                "insisted on paying",
+                "Insisted on paying",
+                "INSISTED ON PAYING",
+                "insisted on paying"
+            ]
         },
         {
             "id": 12,
             "text": "The university sent me an email asking me when would I be arriving.",
             "errorWord": "would I",
-            "answer": "I would"
+            "answers": [
+                "I would",
+                "I Would",
+                "I WOULD",
+                "I would"
+            ]
         }
     ]
 }

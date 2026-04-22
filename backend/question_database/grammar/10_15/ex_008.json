@@ -11,72 +11,120 @@
         {
             "id": 1,
             "text": "1 A (example):",
-            "answer": "will have"
+            "answers": [
+                "will have",
+                "will have got"
+            ]
         },
         {
             "id": 2,
             "text": "1 B:",
-            "answer": "won't have to|||needn't|||don't need to"
+            "answers": [
+                "will not have to",
+                "need not",
+                "do not need to",
+                "won't have to",
+                "needn't",
+                "don't need to"
+            ]
         },
         {
             "id": 3,
             "text": "2 B:",
-            "answer": "has to|||must|||needs to"
+            "answers": [
+                "has to",
+                "must",
+                "needs to"
+            ]
         },
         {
             "id": 4,
             "text": "3 A (question):",
-            "answer": "Do you have to"
+            "answers": [
+                "Do you have to",
+                "Do you need to",
+                "Do you have got to"
+            ]
         },
         {
             "id": 5,
             "text": "3 B (first gap):",
-            "answer": "didn't have to"
+            "answers": [
+                "did not have to",
+                "did not need to"
+            ]
         },
         {
             "id": 6,
             "text": "3 B (second gap):",
-            "answer": "had to"
+            "answers": [
+                "had to",
+                "had got to"
+            ]
         },
         {
             "id": 7,
             "text": "4 A (first gap):",
-            "answer": "didn't have to|||didn't need to"
+            "answers": [
+                "did not have to",
+                "did not need to"
+            ]
         },
         {
             "id": 8,
             "text": "4 A (second gap):",
-            "answer": "will have to"
+            "answers": [
+                "will have to",
+                "will have got to"
+            ]
         },
         {
             "id": 9,
             "text": "5 A:",
-            "answer": "mustn't"
+            "answers": [
+                "must not",
+                "mustn't"
+            ]
         },
         {
             "id": 10,
             "text": "5 B:",
-            "answer": "have to"
+            "answers": [
+                "have to",
+                "have got to"
+            ]
         },
         {
             "id": 11,
             "text": "5 A (question):",
-            "answer": "do you really have to"
+            "answers": [
+                "do you really have to",
+                "do you really have got to"
+            ]
         },
         {
             "id": 12,
             "text": "6 A (first gap):",
-            "answer": "have to"
+            "answers": [
+                "have to",
+                "have got to"
+            ]
         },
         {
             "id": 13,
             "text": "6 A (second gap):",
-            "answer": "have to"
+            "answers": [
+                "have to",
+                "have got to"
+            ]
         },
         {
             "id": 14,
             "text": "6 B:",
-            "answer": "should|||must"
+            "answers": [
+                "should",
+                "must"
+            ]
         }
     ]
 }
