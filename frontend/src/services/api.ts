@@ -38,6 +38,10 @@ export const authApi = {
   login: (username: string, password: string) =>
     api.post('/auth/login', { username, password }),
   getMe: () => api.get('/auth/me'),
+  updateProfile: (data: { fullName?: string; username?: string; phoneNumber?: string }) =>
+    api.patch('/auth/profile', data),
+  changePassword: (data: { currentPassword: string; newPassword: string }) =>
+    api.post('/auth/change-password', data),
 };
 
 export const adminApi = {

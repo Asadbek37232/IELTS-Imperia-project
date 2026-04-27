@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import { authApi } from '../../services/api';
 
 export default function StudentSettings() {
-  const { user, logout } = useAuth();
+  const { user, logout, refetchMe } = useAuth();
   const { isDark, toggleTheme } = useTheme();
 
   const [formData, setFormData] = useState({
@@ -19,26 +20,46 @@ export default function StudentSettings() {
   });
 
   const [isSaving, setIsSaving] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
 
-  const handleProfileSave = (e: React.FormEvent) => {
+  const handleProfileSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
-    setTimeout(() => {
+    setSaveStatus(null);
+    try {
+      await authApi.updateProfile(formData);
+      await refetchMe();
+      setSaveStatus({ type: 'success', message: 'Ma\'lumotlar saqlandi!' });
+      setTimeout(() => setSaveStatus(null), 3000);
+    } catch (err: any) {
+      setSaveStatus({ type: 'error', message: err.response?.data?.message || 'Xatolik yuz berdi' });
+    } finally {
       setIsSaving(false);
-      setIsSaved(true);
-      setTimeout(() => setIsSaved(false), 3000);
-    }, 800);
+    }
   };
 
-  const handlePasswordSave = (e: React.FormEvent) => {
+  const handlePasswordSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (passwordData.new !== passwordData.confirm) {
-      alert("Yangi parollar mos kelmadi!");
+      setSaveStatus({ type: 'error', message: 'Yangi parollar mos kelmadi!' });
       return;
     }
-    alert("Parol o'zgartirish hozircha faol emas (Demo)");
-    setPasswordData({ current: '', new: '', confirm: '' });
+
+    setIsSaving(true);
+    setSaveStatus(null);
+    try {
+      await authApi.changePassword({
+        currentPassword: passwordData.current,
+        newPassword: passwordData.new
+      });
+      setSaveStatus({ type: 'success', message: 'Parol muvaffaqiyatli yangilandi!' });
+      setPasswordData({ current: '', new: '', confirm: '' });
+      setTimeout(() => setSaveStatus(null), 3000);
+    } catch (err: any) {
+      setSaveStatus({ type: 'error', message: err.response?.data?.message || 'Eski parol noto\'g\'ri' });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const inputClass = "w-full bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all";
@@ -81,22 +102,31 @@ export default function StudentSettings() {
           <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-800 p-6 sm:p-8">
             <div className="flex items-center justify-between mb-8 text-gray-900 dark:text-white">
               <h2 className="text-xl font-black">Shaxsiy Ma'lumotlar</h2>
-              {isSaved && <span className="text-emerald-500 bg-emerald-50 dark:bg-emerald-950/30 px-3 py-1 rounded-full border border-emerald-100 dark:border-emerald-900 font-bold animate-pulse text-xs">Ajoyib! Saqlandi</span>}
+              {saveStatus?.type === 'success' && (
+                <span className="text-emerald-500 bg-emerald-50 dark:bg-emerald-950/30 px-3 py-1 rounded-full border border-emerald-100 dark:border-emerald-900 font-bold animate-pulse text-xs">
+                  {saveStatus.message}
+                </span>
+              )}
+              {saveStatus?.type === 'error' && (
+                <span className="text-red-500 bg-red-50 dark:bg-red-950/30 px-3 py-1 rounded-full border border-red-100 dark:border-red-900 font-bold animate-shake text-xs">
+                  {saveStatus.message}
+                </span>
+              )}
             </div>
 
             <form onSubmit={handleProfileSave} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <label className={labelClass}>Ism Familiya</label>
-                  <input type="text" className={inputClass} value={formData.fullName} onChange={e => setFormData({ ...formData, fullName: e.target.value })} />
+                  <input type="text" required className={inputClass} value={formData.fullName} onChange={e => setFormData({ ...formData, fullName: e.target.value })} />
                 </div>
                 <div>
                   <label className={labelClass}>Tutingan ism (Username)</label>
-                  <input type="text" className={inputClass} value={formData.username} onChange={e => setFormData({ ...formData, username: e.target.value })} />
+                  <input type="text" required className={inputClass} value={formData.username} onChange={e => setFormData({ ...formData, username: e.target.value })} />
                 </div>
                 <div className="sm:col-span-2">
                   <label className={labelClass}>Telefon raqam</label>
-                  <input type="text" className={inputClass} value={formData.phoneNumber} onChange={e => setFormData({ ...formData, phoneNumber: e.target.value })} />
+                  <input type="text" required className={inputClass} value={formData.phoneNumber} onChange={e => setFormData({ ...formData, phoneNumber: e.target.value })} />
                 </div>
               </div>
               <div className="flex justify-end pt-4">
@@ -125,8 +155,8 @@ export default function StudentSettings() {
                 </div>
               </div>
               <div className="flex justify-end pt-4">
-                <button type="submit" className="w-full sm:w-auto px-8 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold rounded-xl shadow-lg transition-transform active:scale-95">
-                  Parolni yangilash
+                <button type="submit" disabled={isSaving} className="w-full sm:w-auto px-8 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-bold rounded-xl shadow-lg transition-transform active:scale-95 disabled:opacity-50">
+                  {isSaving ? 'Yangilanmoqda...' : 'Parolni yangilash'}
                 </button>
               </div>
             </form>

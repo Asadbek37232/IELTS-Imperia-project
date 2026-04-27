@@ -9,22 +9,19 @@ import StudentPage from './pages/StudentPage';
 import Loading from './components/Common/Loading';
 
 function AppRoutes() {
-  const { user, isLoading } = useAuth();
+  const { user, token, isLoading } = useAuth();
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-950">
-        <Loading text="Loading..." />
-      </div>
-    );
+  // If we're loading OR we have a token but user data hasn't arrived yet, keep showing Loading
+  if (isLoading || (token && !user)) {
+    return <Loading text="Xavfsiz ulanish..." />;
   }
 
   if (!user) {
     return (
       <Routes>
-        <Route path="/login"    element={<LoginPage />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="*"         element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     );
   }
@@ -34,12 +31,12 @@ function AppRoutes() {
       {user.role === 'ADMIN' ? (
         <>
           <Route path="/admin/*" element={<AdminPage />} />
-          <Route path="*"        element={<Navigate to="/admin" replace />} />
+          <Route path="*" element={<Navigate to="/admin" replace />} />
         </>
       ) : (
         <>
           <Route path="/student/*" element={<StudentPage />} />
-          <Route path="*"          element={<Navigate to="/student" replace />} />
+          <Route path="*" element={<Navigate to="/student" replace />} />
         </>
       )}
     </Routes>
