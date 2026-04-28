@@ -4,9 +4,9 @@
     "variantGroup": "20_25",
     "type": "gap_fill",
     "title": "Word Formation: Adjective to Noun",
-    "instruction": "Complete the sentences with the noun form of the adjectives in brackets.",
+    "instruction": "Complete the sentences with the noun form of the adjectives in brackets. \n \nExample: The graphs show a significant difference (different) between the ages at which men and women marry.",
     "image": null,
-    "passage": "Example: The graphs show a significant difference (different) between the ages at which men and women marry.",
+    "passage": "",
     "questions": [
         {
             "id": 1,

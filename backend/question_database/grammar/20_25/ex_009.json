@@ -4,9 +4,9 @@
     "variantGroup": "20_25",
     "type": "sentence_transformation",
     "title": "Linking Words: Sentence Transformation",
-    "instruction": "Write one or two sentences with a similar meaning to the sentences below, using the words in brackets and any other words you need.",
+    "instruction": "Write one or two sentences with a similar meaning to the sentences below, using the words in brackets and any other words you need. \n \n Example: Despite the rise in profits this year, our company is still losing money. (although) \n Answer: Although there has been a rise in profits this year, our company is still losing money.",
     "image": null,
-    "passage": "Example: Despite the rise in profits this year, our company is still losing money. (although) \nAnswer: Although there has been a rise in profits this year, our company is still losing money.",
+    "passage": "",
     "questions": [
         {
             "id": 1,
