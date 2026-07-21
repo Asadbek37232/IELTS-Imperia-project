@@ -5,6 +5,7 @@ import {
 
 export const SS_PIN = 'ielts_active_pin';
 export const SS_ANSWERS = 'ielts_test_answers';
+export const SS_RULES_ACCEPTED = 'ielts_rules_accepted';
 
 type TestPhase = 'idle' | 'join' | 'in-section' | 'section-transition' | 'completed';
 
@@ -95,6 +96,7 @@ export function TestProvider({ children }: { children: React.ReactNode }) {
     try {
       sessionStorage.removeItem(SS_ANSWERS);
       sessionStorage.removeItem(SS_PIN);
+      sessionStorage.removeItem(SS_RULES_ACCEPTED);
     } catch {}
   }, []);
 

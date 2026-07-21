@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTest } from '../../context/TestContext';
-import { SS_PIN, SS_ANSWERS } from '../../context/TestContext';
+import { SS_PIN, SS_ANSWERS, SS_RULES_ACCEPTED } from '../../context/TestContext';
 import { useAntiCheat } from '../../hooks/useAntiCheat';
 import { studentApi } from '../../services/api';
 import { connectSocket } from '../../services/socketClient';
@@ -33,11 +33,20 @@ export default function TestTaking() {
   const [fontSize, setFontSize] = useState<'normal' | 'large'>('normal');
   const [showSkipModal, setShowSkipModal] = useState(false);
 
-  const [rulesAccepted, setRulesAccepted] = useState(false);
+  const [rulesAccepted, setRulesAccepted] = useState(() => {
+    try {
+      return sessionStorage.getItem(SS_RULES_ACCEPTED) === 'true';
+    } catch {
+      return false;
+    }
+  });
 
   const { fatalStrike, isFullscreenExit } = useAntiCheat(testSessionId, phase === 'in-section' && rulesAccepted && !isExpelled);
 
   const handleAcceptRules = () => {
+    try {
+      sessionStorage.setItem(SS_RULES_ACCEPTED, 'true');
+    } catch {}
     setRulesAccepted(true);
     enterFullscreen();
   };
@@ -71,6 +80,7 @@ export default function TestTaking() {
         try {
           sessionStorage.removeItem(SS_PIN);
           sessionStorage.removeItem(SS_ANSWERS);
+          sessionStorage.removeItem(SS_RULES_ACCEPTED);
         } catch { }
         navigate('/student');
       })
@@ -127,6 +137,7 @@ export default function TestTaking() {
         try {
           sessionStorage.removeItem(SS_PIN);
           sessionStorage.removeItem(SS_ANSWERS);
+          sessionStorage.removeItem(SS_RULES_ACCEPTED);
         } catch { }
         // Mark test as completed so StudentPage exits full-screen mode before navigating
         completeTest();
@@ -144,7 +155,11 @@ export default function TestTaking() {
       const isSessionGone = statusCode === 404 ||
         (serverMsg && (serverMsg.includes('sessiya topilmadi') || serverMsg.includes('session') || serverMsg.includes('topilmadi')));
       if (isSessionGone) {
-        try { sessionStorage.removeItem(SS_PIN); sessionStorage.removeItem(SS_ANSWERS); } catch { }
+        try {
+          sessionStorage.removeItem(SS_PIN);
+          sessionStorage.removeItem(SS_ANSWERS);
+          sessionStorage.removeItem(SS_RULES_ACCEPTED);
+        } catch { }
         navigate('/student/results', { replace: true });
         return;
       }
@@ -171,6 +186,9 @@ export default function TestTaking() {
       console.warn('Expulsion submission failed:', e);
     } finally {
       // 2. Clear all local session data
+      try {
+        sessionStorage.removeItem(SS_RULES_ACCEPTED);
+      } catch {}
       reset();
       // 3. Stay on this page — the ExpulsionOverlay will block everything
     }
